@@ -3,6 +3,5 @@ docker-compose.yml
 Dockerfile
 dist/
 node_modules
-.env
+.env.local
 .gitignore
-.prettierignore
