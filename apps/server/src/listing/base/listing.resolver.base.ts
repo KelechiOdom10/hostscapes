@@ -32,6 +32,8 @@ import { Wishlist } from "../../wishlist/base/Wishlist";
 import { User } from "../../user/base/User";
 import { ListingService } from "../listing.service";
 import { GraphQLError } from "graphql";
+import { Public } from "../../decorators/public.decorator";
+
 @common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
 @graphql.Resolver(() => Listing)
 export class ListingResolverBase {
@@ -55,24 +57,14 @@ export class ListingResolverBase {
     };
   }
 
-  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @Public()
   @graphql.Query(() => [Listing])
-  @nestAccessControl.UseRoles({
-    resource: "Listing",
-    action: "read",
-    possession: "any",
-  })
   async listings(@graphql.Args() args: ListingFindManyArgs) {
     return this.service.findMany(args);
   }
 
-  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @Public()
   @graphql.Query(() => Listing, { nullable: true })
-  @nestAccessControl.UseRoles({
-    resource: "Listing",
-    action: "read",
-    possession: "own",
-  })
   async listing(@graphql.Args() args: ListingFindUniqueArgs) {
     const result = await this.service.findOne(args);
     if (result === null) {
