@@ -25,6 +25,18 @@
   },
   {
     "role": "user",
+    "resource": "User",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "admin",
+    "resource": "User",
+    "action": "read:any",
+    "attributes": "*"
+  },
+  {
+    "role": "user",
     "resource": "Listing",
     "action": "create:any",
     "attributes": "*"

@@ -17,9 +17,9 @@ import * as nestAccessControl from "nest-access-control";
 import * as gqlACGuard from "../../auth/gqlAC.guard";
 import { GqlDefaultAuthGuard } from "../../auth/gqlDefaultAuth.guard";
 import * as common from "@nestjs/common";
+import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { Public } from "../../decorators/public.decorator";
 import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
-import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { CreateUserArgs } from "./CreateUserArgs";
 import { UpdateUserArgs } from "./UpdateUserArgs";
 import { DeleteUserArgs } from "./DeleteUserArgs";
@@ -42,8 +42,12 @@ export class UserResolverBase {
     protected readonly rolesBuilder: nestAccessControl.RolesBuilder
   ) {}
 
-  @Public()
   @graphql.Query(() => MetaQueryPayload)
+  @nestAccessControl.UseRoles({
+    resource: "User",
+    action: "read",
+    possession: "any",
+  })
   async _usersMeta(
     @graphql.Args() args: UserCountArgs
   ): Promise<MetaQueryPayload> {
@@ -53,8 +57,13 @@ export class UserResolverBase {
     };
   }
 
-  @Public()
+  @common.UseInterceptors(AclFilterResponseInterceptor)
   @graphql.Query(() => [User])
+  @nestAccessControl.UseRoles({
+    resource: "User",
+    action: "read",
+    possession: "any",
+  })
   async users(@graphql.Args() args: UserFindManyArgs): Promise<User[]> {
     return this.service.findMany(args);
   }
