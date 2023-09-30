@@ -18,6 +18,7 @@ import { GqlDefaultAuthGuard } from "../../auth/gqlDefaultAuth.guard";
 import * as common from "@nestjs/common";
 import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
+import { Public } from "../../decorators/public.decorator";
 import { CreateTripArgs } from "./CreateTripArgs";
 import { UpdateTripArgs } from "./UpdateTripArgs";
 import { DeleteTripArgs } from "./DeleteTripArgs";
@@ -155,15 +156,10 @@ export class TripResolverBase {
     }
   }
 
-  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @Public()
   @graphql.ResolveField(() => Listing, {
     nullable: true,
     name: "listing",
-  })
-  @nestAccessControl.UseRoles({
-    resource: "Listing",
-    action: "read",
-    possession: "any",
   })
   async resolveFieldListing(@graphql.Parent() parent: Trip) {
     const result = await this.service.getListing(parent.id);
