@@ -11,17 +11,16 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { ObjectType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDate, IsString, IsOptional, ValidateNested } from "class-validator";
+import { IsDate, IsString, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
 import { Listing } from "../../listing/base/Listing";
 import { IsJSONValue } from "@app/custom-validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { JsonValue } from "type-fest";
-import { Trip } from "../../trip/base/Trip";
-import { Wishlist } from "../../wishlist/base/Wishlist";
+import { User } from "../../user/base/User";
 
 @ObjectType()
-class User {
+class Trip {
   @ApiProperty({
     required: true,
   })
@@ -29,17 +28,6 @@ class User {
   @Type(() => Date)
   @Field(() => Date)
   createdAt!: Date;
-
-  @ApiProperty({
-    required: false,
-    type: String,
-  })
-  @IsString()
-  @IsOptional()
-  @Field(() => String, {
-    nullable: true,
-  })
-  firstName!: string | null;
 
   @ApiProperty({
     required: true,
@@ -50,40 +38,19 @@ class User {
   id!: string;
 
   @ApiProperty({
-    required: false,
-    type: String,
-  })
-  @IsString()
-  @IsOptional()
-  @Field(() => String, {
-    nullable: true,
-  })
-  lastName!: string | null;
-
-  @ApiProperty({
-    required: false,
-    type: () => [Listing],
+    required: true,
+    type: () => Listing,
   })
   @ValidateNested()
   @Type(() => Listing)
-  @IsOptional()
-  listings?: Array<Listing>;
+  listing?: Listing;
 
   @ApiProperty({
     required: true,
   })
   @IsJSONValue()
   @Field(() => GraphQLJSON)
-  roles!: JsonValue;
-
-  @ApiProperty({
-    required: false,
-    type: () => [Trip],
-  })
-  @ValidateNested()
-  @Type(() => Trip)
-  @IsOptional()
-  trips?: Array<Trip>;
+  tripData!: JsonValue;
 
   @ApiProperty({
     required: true,
@@ -95,20 +62,11 @@ class User {
 
   @ApiProperty({
     required: true,
-    type: String,
-  })
-  @IsString()
-  @Field(() => String)
-  username!: string;
-
-  @ApiProperty({
-    required: false,
-    type: () => [Wishlist],
+    type: () => User,
   })
   @ValidateNested()
-  @Type(() => Wishlist)
-  @IsOptional()
-  wishlists?: Array<Wishlist>;
+  @Type(() => User)
+  user?: User;
 }
 
-export { User as User };
+export { Trip as Trip };

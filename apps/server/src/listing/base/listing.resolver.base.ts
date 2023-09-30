@@ -18,37 +18,36 @@ import { GqlDefaultAuthGuard } from "../../auth/gqlDefaultAuth.guard";
 import * as common from "@nestjs/common";
 import { AclFilterResponseInterceptor } from "../../interceptors/aclFilterResponse.interceptor";
 import { AclValidateRequestInterceptor } from "../../interceptors/aclValidateRequest.interceptor";
-import { CreateUserArgs } from "./CreateUserArgs";
-import { UpdateUserArgs } from "./UpdateUserArgs";
-import { DeleteUserArgs } from "./DeleteUserArgs";
-import { UserCountArgs } from "./UserCountArgs";
-import { UserFindManyArgs } from "./UserFindManyArgs";
-import { UserFindUniqueArgs } from "./UserFindUniqueArgs";
-import { User } from "./User";
-import { ListingFindManyArgs } from "../../listing/base/ListingFindManyArgs";
-import { Listing } from "../../listing/base/Listing";
+import { CreateListingArgs } from "./CreateListingArgs";
+import { UpdateListingArgs } from "./UpdateListingArgs";
+import { DeleteListingArgs } from "./DeleteListingArgs";
+import { ListingCountArgs } from "./ListingCountArgs";
+import { ListingFindManyArgs } from "./ListingFindManyArgs";
+import { ListingFindUniqueArgs } from "./ListingFindUniqueArgs";
+import { Listing } from "./Listing";
 import { TripFindManyArgs } from "../../trip/base/TripFindManyArgs";
 import { Trip } from "../../trip/base/Trip";
 import { WishlistFindManyArgs } from "../../wishlist/base/WishlistFindManyArgs";
 import { Wishlist } from "../../wishlist/base/Wishlist";
-import { UserService } from "../user.service";
+import { User } from "../../user/base/User";
+import { ListingService } from "../listing.service";
 import { GraphQLError } from "graphql";
 @common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
-@graphql.Resolver(() => User)
-export class UserResolverBase {
+@graphql.Resolver(() => Listing)
+export class ListingResolverBase {
   constructor(
-    protected readonly service: UserService,
+    protected readonly service: ListingService,
     protected readonly rolesBuilder: nestAccessControl.RolesBuilder
   ) {}
 
   @graphql.Query(() => MetaQueryPayload)
   @nestAccessControl.UseRoles({
-    resource: "User",
+    resource: "Listing",
     action: "read",
     possession: "any",
   })
-  async _usersMeta(
-    @graphql.Args() args: UserCountArgs
+  async _listingsMeta(
+    @graphql.Args() args: ListingCountArgs
   ): Promise<MetaQueryPayload> {
     const result = await this.service.count(args);
     return {
@@ -57,24 +56,24 @@ export class UserResolverBase {
   }
 
   @common.UseInterceptors(AclFilterResponseInterceptor)
-  @graphql.Query(() => [User])
+  @graphql.Query(() => [Listing])
   @nestAccessControl.UseRoles({
-    resource: "User",
+    resource: "Listing",
     action: "read",
     possession: "any",
   })
-  async users(@graphql.Args() args: UserFindManyArgs) {
+  async listings(@graphql.Args() args: ListingFindManyArgs) {
     return this.service.findMany(args);
   }
 
   @common.UseInterceptors(AclFilterResponseInterceptor)
-  @graphql.Query(() => User, { nullable: true })
+  @graphql.Query(() => Listing, { nullable: true })
   @nestAccessControl.UseRoles({
-    resource: "User",
+    resource: "Listing",
     action: "read",
     possession: "own",
   })
-  async user(@graphql.Args() args: UserFindUniqueArgs) {
+  async listing(@graphql.Args() args: ListingFindUniqueArgs) {
     const result = await this.service.findOne(args);
     if (result === null) {
       return null;
@@ -83,31 +82,43 @@ export class UserResolverBase {
   }
 
   @common.UseInterceptors(AclValidateRequestInterceptor)
-  @graphql.Mutation(() => User)
+  @graphql.Mutation(() => Listing)
   @nestAccessControl.UseRoles({
-    resource: "User",
+    resource: "Listing",
     action: "create",
     possession: "any",
   })
-  async createUser(@graphql.Args() args: CreateUserArgs) {
+  async createListing(@graphql.Args() args: CreateListingArgs) {
     return await this.service.create({
       ...args,
-      data: args.data,
+      data: {
+        ...args.data,
+
+        user: {
+          connect: args.data.user,
+        },
+      },
     });
   }
 
   @common.UseInterceptors(AclValidateRequestInterceptor)
-  @graphql.Mutation(() => User)
+  @graphql.Mutation(() => Listing)
   @nestAccessControl.UseRoles({
-    resource: "User",
+    resource: "Listing",
     action: "update",
     possession: "any",
   })
-  async updateUser(@graphql.Args() args: UpdateUserArgs) {
+  async updateListing(@graphql.Args() args: UpdateListingArgs) {
     try {
       return await this.service.update({
         ...args,
-        data: args.data,
+        data: {
+          ...args.data,
+
+          user: {
+            connect: args.data.user,
+          },
+        },
       });
     } catch (error: any) {
       if (isRecordNotFoundError(error)) {
@@ -119,13 +130,13 @@ export class UserResolverBase {
     }
   }
 
-  @graphql.Mutation(() => User)
+  @graphql.Mutation(() => Listing)
   @nestAccessControl.UseRoles({
-    resource: "User",
+    resource: "Listing",
     action: "delete",
     possession: "any",
   })
-  async deleteUser(@graphql.Args() args: DeleteUserArgs) {
+  async deleteListing(@graphql.Args() args: DeleteListingArgs) {
     try {
       return await this.service.delete(args);
     } catch (error: any) {
@@ -139,26 +150,6 @@ export class UserResolverBase {
   }
 
   @common.UseInterceptors(AclFilterResponseInterceptor)
-  @graphql.ResolveField(() => [Listing], { name: "listings" })
-  @nestAccessControl.UseRoles({
-    resource: "Listing",
-    action: "read",
-    possession: "any",
-  })
-  async resolveFieldListings(
-    @graphql.Parent() parent: User,
-    @graphql.Args() args: ListingFindManyArgs
-  ) {
-    const results = await this.service.findListings(parent.id, args);
-
-    if (!results) {
-      return [];
-    }
-
-    return results;
-  }
-
-  @common.UseInterceptors(AclFilterResponseInterceptor)
   @graphql.ResolveField(() => [Trip], { name: "trips" })
   @nestAccessControl.UseRoles({
     resource: "Trip",
@@ -166,7 +157,7 @@ export class UserResolverBase {
     possession: "any",
   })
   async resolveFieldTrips(
-    @graphql.Parent() parent: User,
+    @graphql.Parent() parent: Listing,
     @graphql.Args() args: TripFindManyArgs
   ) {
     const results = await this.service.findTrips(parent.id, args);
@@ -186,7 +177,7 @@ export class UserResolverBase {
     possession: "any",
   })
   async resolveFieldWishlists(
-    @graphql.Parent() parent: User,
+    @graphql.Parent() parent: Listing,
     @graphql.Args() args: WishlistFindManyArgs
   ): Promise<Wishlist[]> {
     const results = await this.service.findWishlists(parent.id, args);
@@ -196,5 +187,24 @@ export class UserResolverBase {
     }
 
     return results;
+  }
+
+  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @graphql.ResolveField(() => User, {
+    nullable: true,
+    name: "user",
+  })
+  @nestAccessControl.UseRoles({
+    resource: "User",
+    action: "read",
+    possession: "any",
+  })
+  async resolveFieldUser(@graphql.Parent() parent: Listing) {
+    const result = await this.service.getUser(parent.id);
+
+    if (!result) {
+      return null;
+    }
+    return result;
   }
 }

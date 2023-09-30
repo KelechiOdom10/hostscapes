@@ -11,17 +11,23 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { ObjectType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDate, IsString, IsOptional, ValidateNested } from "class-validator";
+import {
+  IsDate,
+  IsString,
+  IsInt,
+  ValidateNested,
+  IsOptional,
+} from "class-validator";
 import { Type } from "class-transformer";
-import { Listing } from "../../listing/base/Listing";
 import { IsJSONValue } from "@app/custom-validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { JsonValue } from "type-fest";
 import { Trip } from "../../trip/base/Trip";
+import { User } from "../../user/base/User";
 import { Wishlist } from "../../wishlist/base/Wishlist";
 
 @ObjectType()
-class User {
+class Listing {
   @ApiProperty({
     required: true,
   })
@@ -31,15 +37,12 @@ class User {
   createdAt!: Date;
 
   @ApiProperty({
-    required: false,
+    required: true,
     type: String,
   })
   @IsString()
-  @IsOptional()
-  @Field(() => String, {
-    nullable: true,
-  })
-  firstName!: string | null;
+  @Field(() => String)
+  description!: string;
 
   @ApiProperty({
     required: true,
@@ -50,31 +53,71 @@ class User {
   id!: string;
 
   @ApiProperty({
-    required: false,
+    required: true,
+  })
+  @IsJSONValue()
+  @Field(() => GraphQLJSON)
+  locationData!: JsonValue;
+
+  @ApiProperty({
+    required: true,
     type: String,
   })
   @IsString()
-  @IsOptional()
-  @Field(() => String, {
-    nullable: true,
-  })
-  lastName!: string | null;
-
-  @ApiProperty({
-    required: false,
-    type: () => [Listing],
-  })
-  @ValidateNested()
-  @Type(() => Listing)
-  @IsOptional()
-  listings?: Array<Listing>;
+  @Field(() => String)
+  locationType!: string;
 
   @ApiProperty({
     required: true,
   })
   @IsJSONValue()
   @Field(() => GraphQLJSON)
-  roles!: JsonValue;
+  mapData!: JsonValue;
+
+  @ApiProperty({
+    required: true,
+  })
+  @IsJSONValue()
+  @Field(() => GraphQLJSON)
+  photos!: JsonValue;
+
+  @ApiProperty({
+    required: true,
+  })
+  @IsJSONValue()
+  @Field(() => GraphQLJSON)
+  placeAmeneites!: JsonValue;
+
+  @ApiProperty({
+    required: true,
+  })
+  @IsJSONValue()
+  @Field(() => GraphQLJSON)
+  placeSpace!: JsonValue;
+
+  @ApiProperty({
+    required: true,
+    type: String,
+  })
+  @IsString()
+  @Field(() => String)
+  placetype!: string;
+
+  @ApiProperty({
+    required: true,
+    type: Number,
+  })
+  @IsInt()
+  @Field(() => Number)
+  price!: number;
+
+  @ApiProperty({
+    required: true,
+    type: String,
+  })
+  @IsString()
+  @Field(() => String)
+  title!: string;
 
   @ApiProperty({
     required: false,
@@ -95,11 +138,11 @@ class User {
 
   @ApiProperty({
     required: true,
-    type: String,
+    type: () => User,
   })
-  @IsString()
-  @Field(() => String)
-  username!: string;
+  @ValidateNested()
+  @Type(() => User)
+  user?: User;
 
   @ApiProperty({
     required: false,
@@ -111,4 +154,4 @@ class User {
   wishlists?: Array<Wishlist>;
 }
 
-export { User as User };
+export { Listing as Listing };
