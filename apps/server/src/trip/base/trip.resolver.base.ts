@@ -170,15 +170,10 @@ export class TripResolverBase {
     return result;
   }
 
-  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @Public()
   @graphql.ResolveField(() => User, {
     nullable: true,
     name: "user",
-  })
-  @nestAccessControl.UseRoles({
-    resource: "User",
-    action: "read",
-    possession: "any",
   })
   async resolveFieldUser(@graphql.Parent() parent: Trip) {
     const result = await this.service.getUser(parent.id);

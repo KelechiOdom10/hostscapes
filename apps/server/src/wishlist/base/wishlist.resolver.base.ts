@@ -180,15 +180,10 @@ export class WishlistResolverBase {
     return result;
   }
 
-  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @Public()
   @graphql.ResolveField(() => User, {
     nullable: true,
     name: "user",
-  })
-  @nestAccessControl.UseRoles({
-    resource: "User",
-    action: "read",
-    possession: "any",
   })
   async resolveFieldUser(@graphql.Parent() parent: Wishlist) {
     const result = await this.service.getUser(parent.id);

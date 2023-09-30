@@ -177,15 +177,10 @@ export class ListingResolverBase {
     return results;
   }
 
-  @common.UseInterceptors(AclFilterResponseInterceptor)
+  @Public()
   @graphql.ResolveField(() => User, {
     nullable: true,
     name: "user",
-  })
-  @nestAccessControl.UseRoles({
-    resource: "User",
-    action: "read",
-    possession: "any",
   })
   async resolveFieldUser(@graphql.Parent() parent: Listing) {
     const result = await this.service.getUser(parent.id);
