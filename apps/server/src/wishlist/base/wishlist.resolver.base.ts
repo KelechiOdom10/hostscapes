@@ -10,7 +10,6 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import * as graphql from "@nestjs/graphql";
-import * as apollo from "apollo-server-express";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
 import * as nestAccessControl from "nest-access-control";
@@ -30,6 +29,8 @@ import { Wishlist } from "./Wishlist";
 import { Listing } from "../../listing/base/Listing";
 import { User } from "../../user/base/User";
 import { WishlistService } from "../wishlist.service";
+import { GraphQLError } from "graphql";
+
 @common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
 @graphql.Resolver(() => Wishlist)
 export class WishlistResolverBase {
@@ -134,9 +135,9 @@ export class WishlistResolverBase {
           },
         },
       });
-    } catch (error) {
+    } catch (error: any) {
       if (isRecordNotFoundError(error)) {
-        throw new apollo.ApolloError(
+        throw new GraphQLError(
           `No resource was found for ${JSON.stringify(args.where)}`
         );
       }
@@ -155,9 +156,9 @@ export class WishlistResolverBase {
   ): Promise<Wishlist | null> {
     try {
       return await this.service.delete(args);
-    } catch (error) {
+    } catch (error: any) {
       if (isRecordNotFoundError(error)) {
-        throw new apollo.ApolloError(
+        throw new GraphQLError(
           `No resource was found for ${JSON.stringify(args.where)}`
         );
       }
@@ -170,9 +171,7 @@ export class WishlistResolverBase {
     nullable: true,
     name: "listing",
   })
-  async resolveFieldListing(
-    @graphql.Parent() parent: Wishlist
-  ): Promise<Listing | null> {
+  async resolveFieldListing(@graphql.Parent() parent: Wishlist) {
     const result = await this.service.getListing(parent.id);
 
     if (!result) {
@@ -191,9 +190,7 @@ export class WishlistResolverBase {
     action: "read",
     possession: "any",
   })
-  async resolveFieldUser(
-    @graphql.Parent() parent: Wishlist
-  ): Promise<User | null> {
+  async resolveFieldUser(@graphql.Parent() parent: Wishlist) {
     const result = await this.service.getUser(parent.id);
 
     if (!result) {

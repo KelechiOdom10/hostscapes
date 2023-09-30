@@ -12,7 +12,7 @@ export function isRecordNotFoundError(
 }
 
 export async function transformStringFieldUpdateInput<
-  T extends undefined | string | { set?: string }
+  T extends undefined | string | { set?: string },
 >(input: T, transform: (input: string) => Promise<string>): Promise<T> {
   if (typeof input === "object" && typeof input?.set === "string") {
     return { set: await transform(input.set) } as T;
