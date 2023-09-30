@@ -148,7 +148,7 @@ export class UserResolverBase {
   async resolveFieldListings(
     @graphql.Parent() parent: User,
     @graphql.Args() args: ListingFindManyArgs
-  ): Promise<Listing[]> {
+  ) {
     const results = await this.service.findListings(parent.id, args);
 
     if (!results) {
@@ -168,7 +168,7 @@ export class UserResolverBase {
   async resolveFieldTrips(
     @graphql.Parent() parent: User,
     @graphql.Args() args: TripFindManyArgs
-  ): Promise<Trip[]> {
+  ) {
     const results = await this.service.findTrips(parent.id, args);
 
     if (!results) {

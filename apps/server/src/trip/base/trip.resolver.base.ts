@@ -10,7 +10,6 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import * as graphql from "@nestjs/graphql";
-import * as apollo from "apollo-server-express";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
 import * as nestAccessControl from "nest-access-control";
@@ -29,6 +28,8 @@ import { Trip } from "./Trip";
 import { Listing } from "../../listing/base/Listing";
 import { User } from "../../user/base/User";
 import { TripService } from "../trip.service";
+import { GraphQLError } from "graphql";
+
 @common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
 @graphql.Resolver(() => Trip)
 export class TripResolverBase {
@@ -59,7 +60,7 @@ export class TripResolverBase {
     action: "read",
     possession: "any",
   })
-  async trips(@graphql.Args() args: TripFindManyArgs): Promise<Trip[]> {
+  async trips(@graphql.Args() args: TripFindManyArgs) {
     return this.service.findMany(args);
   }
 
@@ -70,7 +71,7 @@ export class TripResolverBase {
     action: "read",
     possession: "own",
   })
-  async trip(@graphql.Args() args: TripFindUniqueArgs): Promise<Trip | null> {
+  async trip(@graphql.Args() args: TripFindUniqueArgs) {
     const result = await this.service.findOne(args);
     if (result === null) {
       return null;
@@ -85,7 +86,7 @@ export class TripResolverBase {
     action: "create",
     possession: "any",
   })
-  async createTrip(@graphql.Args() args: CreateTripArgs): Promise<Trip> {
+  async createTrip(@graphql.Args() args: CreateTripArgs) {
     return await this.service.create({
       ...args,
       data: {
@@ -109,7 +110,7 @@ export class TripResolverBase {
     action: "update",
     possession: "any",
   })
-  async updateTrip(@graphql.Args() args: UpdateTripArgs): Promise<Trip | null> {
+  async updateTrip(@graphql.Args() args: UpdateTripArgs) {
     try {
       return await this.service.update({
         ...args,
@@ -125,9 +126,9 @@ export class TripResolverBase {
           },
         },
       });
-    } catch (error) {
+    } catch (error: any) {
       if (isRecordNotFoundError(error)) {
-        throw new apollo.ApolloError(
+        throw new GraphQLError(
           `No resource was found for ${JSON.stringify(args.where)}`
         );
       }
@@ -141,12 +142,12 @@ export class TripResolverBase {
     action: "delete",
     possession: "any",
   })
-  async deleteTrip(@graphql.Args() args: DeleteTripArgs): Promise<Trip | null> {
+  async deleteTrip(@graphql.Args() args: DeleteTripArgs) {
     try {
       return await this.service.delete(args);
-    } catch (error) {
+    } catch (error: any) {
       if (isRecordNotFoundError(error)) {
-        throw new apollo.ApolloError(
+        throw new GraphQLError(
           `No resource was found for ${JSON.stringify(args.where)}`
         );
       }
@@ -164,9 +165,7 @@ export class TripResolverBase {
     action: "read",
     possession: "any",
   })
-  async resolveFieldListing(
-    @graphql.Parent() parent: Trip
-  ): Promise<Listing | null> {
+  async resolveFieldListing(@graphql.Parent() parent: Trip) {
     const result = await this.service.getListing(parent.id);
 
     if (!result) {
@@ -185,7 +184,7 @@ export class TripResolverBase {
     action: "read",
     possession: "any",
   })
-  async resolveFieldUser(@graphql.Parent() parent: Trip): Promise<User | null> {
+  async resolveFieldUser(@graphql.Parent() parent: Trip) {
     const result = await this.service.getUser(parent.id);
 
     if (!result) {
