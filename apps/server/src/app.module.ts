@@ -1,6 +1,6 @@
-import { Module, Scope } from "@nestjs/common";
-import { APP_INTERCEPTOR } from "@nestjs/core";
-import { MorganInterceptor, MorganModule } from "nest-morgan";
+import { Module } from "@nestjs/common";
+import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
+import { LoggerModule } from "nestjs-pino";
 import { UserModule } from "./user/user.module";
 import { ListingModule } from "./listing/listing.module";
 import { WishlistModule } from "./wishlist/wishlist.module";
@@ -10,7 +10,7 @@ import { PrismaModule } from "./prisma/prisma.module";
 import { SecretsManagerModule } from "./providers/secrets/secretsManager.module";
 import { ServeStaticModule } from "@nestjs/serve-static";
 import { ServeStaticOptionsService } from "./serveStaticOptions.service";
-import { ConfigModule, ConfigService } from "@nestjs/config";
+import { ConfigModule } from "@nestjs/config";
 import { GraphQLModule } from "@nestjs/graphql";
 
 import { ACLModule } from "./auth/acl.module";
@@ -28,32 +28,17 @@ import { AuthModule } from "./auth/auth.module";
     HealthModule,
     PrismaModule,
     SecretsManagerModule,
-    MorganModule,
+    LoggerModule.forRoot(),
     ConfigModule.forRoot({ isGlobal: true }),
     ServeStaticModule.forRootAsync({
       useClass: ServeStaticOptionsService,
     }),
-    GraphQLModule.forRootAsync({
-      useFactory: (configService) => {
-        const playground = configService.get("GRAPHQL_PLAYGROUND");
-        const introspection = configService.get("GRAPHQL_INTROSPECTION");
-        return {
-          autoSchemaFile: "schema.graphql",
-          sortSchema: true,
-          playground,
-          introspection: playground || introspection,
-        };
-      },
-      inject: [ConfigService],
-      imports: [ConfigModule],
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: "schema.graphql",
+      sortSchema: true,
     }),
   ],
-  providers: [
-    {
-      provide: APP_INTERCEPTOR,
-      scope: Scope.REQUEST,
-      useClass: MorganInterceptor("combined"),
-    },
-  ],
+  providers: [],
 })
 export class AppModule {}
