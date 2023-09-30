@@ -12,6 +12,7 @@ import { TripService } from "./trip.service";
 export class TripResolver extends TripResolverBase {
   constructor(
     protected readonly service: TripService,
+    // @ts-expect-error ignore next line
     @nestAccessControl.InjectRolesBuilder()
     protected readonly rolesBuilder: nestAccessControl.RolesBuilder
   ) {
