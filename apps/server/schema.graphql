@@ -23,6 +23,22 @@ input DateTimeFilter {
   notIn: [DateTime!]
 }
 
+input DecimalFilter {
+  equals: Float
+  gt: Float
+  gte: Float
+  in: [Float!]
+  lt: Float
+  lte: Float
+  not: Float
+  notIn: [Float!]
+}
+
+enum EnumListingListingType {
+  Apartment
+  House
+}
+
 input IntFilter {
   equals: Int
   gt: Int
@@ -50,17 +66,23 @@ input JsonFilter {
 }
 
 type Listing {
+  address: String!
+  amenities: JSON!
+  country: String!
   createdAt: DateTime!
   description: String!
   id: String!
-  locationData: JSON!
-  locationType: String!
-  mapData: JSON!
+  latitude: Float!
+  listingType: EnumListingListingType
+  longitude: Float!
+  maxGuests: Float!
+  numBaths: Float!
+  numBedrooms: Float!
+  numBeds: String!
   photos: JSON!
-  placeAmeneites: JSON!
-  placeSpace: JSON!
-  placetype: String!
   price: Float!
+  shortDescription: String!
+  slug: String!
   title: String!
   trips(orderBy: [TripOrderByInput!], skip: Float, take: Float, where: TripWhereInput): [Trip!]!
   updatedAt: DateTime!
@@ -69,15 +91,21 @@ type Listing {
 }
 
 input ListingCreateInput {
+  address: String!
+  amenities: JSON!
+  country: String!
   description: String!
-  locationData: JSON!
-  locationType: String!
-  mapData: JSON!
+  latitude: Float!
+  listingType: EnumListingListingType
+  longitude: Float!
+  maxGuests: Float!
+  numBaths: Float!
+  numBedrooms: Float!
+  numBeds: String!
   photos: JSON!
-  placeAmeneites: JSON!
-  placeSpace: JSON!
-  placetype: String!
   price: Float!
+  shortDescription: String!
+  slug: String!
   title: String!
   trips: TripCreateNestedManyWithoutListingsInput
   user: UserWhereUniqueInput!
@@ -95,32 +123,44 @@ input ListingListRelationFilter {
 }
 
 input ListingOrderByInput {
+  address: SortOrder
+  amenities: SortOrder
+  country: SortOrder
   createdAt: SortOrder
-  createdById: SortOrder
   description: SortOrder
   id: SortOrder
-  locationData: SortOrder
-  locationType: SortOrder
-  mapData: SortOrder
+  latitude: SortOrder
+  listingType: SortOrder
+  longitude: SortOrder
+  maxGuests: SortOrder
+  numBaths: SortOrder
+  numBedrooms: SortOrder
+  numBeds: SortOrder
   photos: SortOrder
-  placeAmeneites: SortOrder
-  placeSpace: SortOrder
-  placetype: SortOrder
   price: SortOrder
+  shortDescription: SortOrder
+  slug: SortOrder
   title: SortOrder
   updatedAt: SortOrder
+  userId: SortOrder
 }
 
 input ListingUpdateInput {
+  address: String
+  amenities: JSON
+  country: String
   description: String
-  locationData: JSON
-  locationType: String
-  mapData: JSON
+  latitude: Float
+  listingType: EnumListingListingType
+  longitude: Float
+  maxGuests: Float
+  numBaths: Float
+  numBedrooms: Float
+  numBeds: String
   photos: JSON
-  placeAmeneites: JSON
-  placeSpace: JSON
-  placetype: String
   price: Float
+  shortDescription: String
+  slug: String
   title: String
   trips: TripUpdateManyWithoutListingsInput
   user: UserWhereUniqueInput
@@ -134,17 +174,23 @@ input ListingUpdateManyWithoutUsersInput {
 }
 
 input ListingWhereInput {
+  address: StringFilter
+  amenities: JsonFilter
+  country: StringFilter
   createdAt: DateTimeFilter
   description: StringFilter
   id: StringFilter
-  locationData: JsonFilter
-  locationType: StringFilter
-  mapData: JsonFilter
+  latitude: DecimalFilter
+  listingType: EnumListingListingType
+  longitude: DecimalFilter
+  maxGuests: IntFilter
+  numBaths: IntFilter
+  numBedrooms: IntFilter
+  numBeds: StringFilter
   photos: JsonFilter
-  placeAmeneites: JsonFilter
-  placeSpace: JsonFilter
-  placetype: StringFilter
   price: IntFilter
+  shortDescription: StringFilter
+  slug: StringFilter
   title: StringFilter
   trips: TripListRelationFilter
   updatedAt: DateTimeFilter
@@ -234,16 +280,18 @@ input StringNullableFilter {
 
 type Trip {
   createdAt: DateTime!
+  endDate: DateTime!
   id: String!
   listing: Listing
-  tripData: JSON!
+  startDate: DateTime!
   updatedAt: DateTime!
   user: User
 }
 
 input TripCreateInput {
+  endDate: DateTime!
   listing: ListingWhereUniqueInput!
-  tripData: JSON!
+  startDate: DateTime!
   user: UserWhereUniqueInput!
 }
 
@@ -263,16 +311,18 @@ input TripListRelationFilter {
 
 input TripOrderByInput {
   createdAt: SortOrder
+  endDate: SortOrder
   id: SortOrder
   listingId: SortOrder
-  tripData: SortOrder
+  startDate: SortOrder
   updatedAt: SortOrder
   userId: SortOrder
 }
 
 input TripUpdateInput {
+  endDate: DateTime
   listing: ListingWhereUniqueInput
-  tripData: JSON
+  startDate: DateTime
   user: UserWhereUniqueInput
 }
 
@@ -290,9 +340,10 @@ input TripUpdateManyWithoutUsersInput {
 
 input TripWhereInput {
   createdAt: DateTimeFilter
+  endDate: DateTimeFilter
   id: StringFilter
   listing: ListingWhereUniqueInput
-  tripData: JsonFilter
+  startDate: DateTimeFilter
   updatedAt: DateTimeFilter
   user: UserWhereUniqueInput
 }

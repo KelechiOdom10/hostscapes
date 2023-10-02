@@ -149,7 +149,7 @@ class ListingUpdateInput {
   @Field(() => String, {
     nullable: true,
   })
-  numberOfBeds?: string | null;
+  numBeds?: string;
 
   @ApiProperty({
     required: false,

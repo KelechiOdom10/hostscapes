@@ -160,7 +160,7 @@ class ListingOrderByInput {
   @Field(() => SortOrder, {
     nullable: true,
   })
-  numberOfBeds?: SortOrder;
+  numBeds?: SortOrder;
 
   @ApiProperty({
     required: false,
@@ -237,7 +237,7 @@ class ListingOrderByInput {
   @Field(() => SortOrder, {
     nullable: true,
   })
-  hostId?: SortOrder;
+  userId?: SortOrder;
 }
 
 export { ListingOrderByInput as ListingOrderByInput };

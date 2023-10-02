@@ -131,15 +131,12 @@ class Listing {
   numBedrooms!: number;
 
   @ApiProperty({
-    required: false,
+    required: true,
     type: String,
   })
   @IsString()
-  @IsOptional()
-  @Field(() => String, {
-    nullable: true,
-  })
-  numberOfBeds!: string | null;
+  @Field(() => String)
+  numBeds!: string;
 
   @ApiProperty({
     required: true,
