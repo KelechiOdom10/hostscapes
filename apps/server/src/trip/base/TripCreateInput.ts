@@ -11,16 +11,21 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { ListingWhereUniqueInput } from "../../listing/base/ListingWhereUniqueInput";
-import { ValidateNested } from "class-validator";
+import { IsDate, ValidateNested } from "class-validator";
 import { Type } from "class-transformer";
-import { IsJSONValue } from "@app/custom-validators";
-import { GraphQLJSON } from "graphql-type-json";
-import { InputJsonValue } from "../../types";
+import { ListingWhereUniqueInput } from "../../listing/base/ListingWhereUniqueInput";
 import { UserWhereUniqueInput } from "../../user/base/UserWhereUniqueInput";
 
 @InputType()
 class TripCreateInput {
+  @ApiProperty({
+    required: true,
+  })
+  @IsDate()
+  @Type(() => Date)
+  @Field(() => Date)
+  endDate!: Date;
+
   @ApiProperty({
     required: true,
     type: () => ListingWhereUniqueInput,
@@ -33,9 +38,10 @@ class TripCreateInput {
   @ApiProperty({
     required: true,
   })
-  @IsJSONValue()
-  @Field(() => GraphQLJSON)
-  tripData!: InputJsonValue;
+  @IsDate()
+  @Type(() => Date)
+  @Field(() => Date)
+  startDate!: Date;
 
   @ApiProperty({
     required: true,
