@@ -27,8 +27,8 @@ model Listing {
   country          String
   createdAt        DateTime               @default(now())
   description      String
-  host             User                   @relation(fields: [createdById], references: [id])
-  createdById      String
+  host             User                   @relation(fields: [hostId], references: [id])
+  hostId           String
   id               String                 @id @default(cuid())
   listingType      EnumListingListingType
   location         String
