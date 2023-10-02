@@ -13,7 +13,7 @@ export function IsJSONValue(validationOptions?: ValidationOptions) {
       propertyName: propertyName,
       options: validationOptions,
       validator: {
-        validate(value: any, args: ValidationArguments) {
+        validate(value: any) {
           if (typeof value === "string") {
             return isJSONValidator(value);
           }

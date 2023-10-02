@@ -13,6 +13,7 @@ import { ForbiddenException } from "../errors";
 @Injectable()
 export class AclValidateRequestInterceptor implements NestInterceptor {
   constructor(
+    // @ts-expect-error ignore next line
     @InjectRolesBuilder() private readonly rolesBuilder: RolesBuilder,
     private readonly reflector: Reflector
   ) {}
