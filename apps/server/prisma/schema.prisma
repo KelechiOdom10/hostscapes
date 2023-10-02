@@ -25,13 +25,13 @@ model Listing {
   address          String
   amenities        Json
   country          String
-  createdAt        DateTime               @default(now())
+  createdAt        DateTime                @default(now())
   description      String
-  host             User                   @relation(fields: [hostId], references: [id])
+  host             User                    @relation(fields: [hostId], references: [id])
   hostId           String
-  id               String                 @id @default(cuid())
+  id               String                  @id @default(cuid())
   latitude         Decimal
-  listingType      EnumListingListingType
+  listingType      EnumListingListingType? @default(EnumListingType.Apartment)
   location         String
   longitude        Decimal
   maxGuests        Int
@@ -40,10 +40,10 @@ model Listing {
   photos           Json
   price            Int
   shortDescription String
-  slug             String                 @unique
+  slug             String                  @unique
   title            String
   trips            Trip[]
-  updatedAt        DateTime               @updatedAt
+  updatedAt        DateTime                @updatedAt
   wishlists        Wishlist[]
 }
 

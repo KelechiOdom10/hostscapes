@@ -17,8 +17,8 @@ import {
   ValidateNested,
   IsNumber,
   IsEnum,
-  IsInt,
   IsOptional,
+  IsInt,
 } from "class-validator";
 import { IsJSONValue } from "@app/custom-validators";
 import { GraphQLJSON } from "graphql-type-json";
@@ -96,14 +96,15 @@ class Listing {
   latitude!: Decimal;
 
   @ApiProperty({
-    required: true,
+    required: false,
     enum: EnumListingListingType,
   })
   @IsEnum(EnumListingListingType)
+  @IsOptional()
   @Field(() => EnumListingListingType, {
     nullable: true,
   })
-  listingType?: "Apartment" | "House";
+  listingType?: "Apartment" | "House" | null;
 
   @ApiProperty({
     required: true,

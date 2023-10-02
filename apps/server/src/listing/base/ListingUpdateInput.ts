@@ -106,7 +106,7 @@ class ListingUpdateInput {
   @Field(() => EnumListingListingType, {
     nullable: true,
   })
-  listingType?: "Apartment" | "House";
+  listingType?: "Apartment" | "House" | null;
 
   @ApiProperty({
     required: false,
