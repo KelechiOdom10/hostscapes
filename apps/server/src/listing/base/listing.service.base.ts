@@ -69,11 +69,11 @@ export class ListingServiceBase {
       .wishlists(args);
   }
 
-  async getHost(parentId: string): Promise<User | null> {
+  async getUser(parentId: string): Promise<User | null> {
     return this.prisma.listing
       .findUnique({
         where: { id: parentId },
       })
-      .host();
+      .user();
   }
 }

@@ -27,8 +27,6 @@ model Listing {
   country          String
   createdAt        DateTime                @default(now())
   description      String
-  host             User                    @relation(fields: [hostId], references: [id])
-  hostId           String
   id               String                  @id @default(cuid())
   latitude         Decimal
   listingType      EnumListingListingType? @default(Apartment)
@@ -44,6 +42,8 @@ model Listing {
   title            String
   trips            Trip[]
   updatedAt        DateTime                @updatedAt
+  user             User                    @relation(fields: [hostId], references: [id])
+  hostId           String
   wishlists        Wishlist[]
 }
 
