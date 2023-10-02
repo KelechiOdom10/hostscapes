@@ -81,6 +81,15 @@ export class UserResolverBase {
   @Public()
   @graphql.Mutation(() => User)
   async createUser(@graphql.Args() args: CreateUserArgs) {
+    const user = await this.service.findOne({
+      where: { username: args.data.username },
+    });
+    if (user) {
+      throw new common.ConflictException(
+        `User with username ${args.data.username} already exists`
+      );
+    }
+
     return await this.service.create({
       ...args,
       data: args.data,
