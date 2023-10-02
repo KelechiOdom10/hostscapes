@@ -237,7 +237,7 @@ class ListingOrderByInput {
   @Field(() => SortOrder, {
     nullable: true,
   })
-  hostId?: SortOrder;
+  userd?: SortOrder;
 }
 
 export { ListingOrderByInput as ListingOrderByInput };

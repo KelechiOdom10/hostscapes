@@ -19,7 +19,6 @@ import { DateTimeFilter } from "../../util/DateTimeFilter";
 import { DecimalFilter } from "../../util/DecimalFilter";
 import { EnumListingListingType } from "./EnumListingListingType";
 import { IntFilter } from "../../util/IntFilter";
-import { StringNullableFilter } from "../../util/StringNullableFilter";
 import { TripListRelationFilter } from "../../trip/base/TripListRelationFilter";
 import { UserWhereUniqueInput } from "../../user/base/UserWhereUniqueInput";
 import { WishlistListRelationFilter } from "../../wishlist/base/WishlistListRelationFilter";
@@ -160,14 +159,14 @@ class ListingWhereInput {
 
   @ApiProperty({
     required: false,
-    type: StringNullableFilter,
+    type: StringFilter,
   })
-  @Type(() => StringNullableFilter)
+  @Type(() => StringFilter)
   @IsOptional()
-  @Field(() => StringNullableFilter, {
+  @Field(() => StringFilter, {
     nullable: true,
   })
-  numberOfBeds?: StringNullableFilter;
+  numberOfBeds?: StringFilter;
 
   @ApiProperty({
     required: false,
