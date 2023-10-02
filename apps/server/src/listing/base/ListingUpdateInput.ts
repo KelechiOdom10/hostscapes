@@ -110,17 +110,6 @@ class ListingUpdateInput {
 
   @ApiProperty({
     required: false,
-    type: String,
-  })
-  @IsString()
-  @IsOptional()
-  @Field(() => String, {
-    nullable: true,
-  })
-  location?: string;
-
-  @ApiProperty({
-    required: false,
     type: Number,
   })
   @IsNumber()

@@ -108,14 +108,6 @@ class Listing {
 
   @ApiProperty({
     required: true,
-    type: String,
-  })
-  @IsString()
-  @Field(() => String)
-  location!: string;
-
-  @ApiProperty({
-    required: true,
     type: Number,
   })
   @IsNumber()

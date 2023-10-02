@@ -127,17 +127,6 @@ class ListingWhereInput {
 
   @ApiProperty({
     required: false,
-    type: StringFilter,
-  })
-  @Type(() => StringFilter)
-  @IsOptional()
-  @Field(() => StringFilter, {
-    nullable: true,
-  })
-  location?: StringFilter;
-
-  @ApiProperty({
-    required: false,
     type: DecimalFilter,
   })
   @Type(() => DecimalFilter)

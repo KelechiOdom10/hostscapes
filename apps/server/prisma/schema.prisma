@@ -31,8 +31,7 @@ model Listing {
   hostId           String
   id               String                  @id @default(cuid())
   latitude         Decimal
-  listingType      EnumListingListingType? @default(EnumListingType.Apartment)
-  location         String
+  listingType      EnumListingListingType? @default(Apartment)
   longitude        Decimal
   maxGuests        Int
   numBaths         Int
