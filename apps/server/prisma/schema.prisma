@@ -34,7 +34,7 @@ model Listing {
   maxGuests        Int
   numBaths         Int
   numBedrooms      Int
-  numberOfBeds     String
+  numBeds          String
   photos           Json
   price            Int
   shortDescription String

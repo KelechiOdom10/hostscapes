@@ -160,7 +160,7 @@ class ListingOrderByInput {
   @Field(() => SortOrder, {
     nullable: true,
   })
-  numberOfBeds?: SortOrder;
+  numBeds?: SortOrder;
 
   @ApiProperty({
     required: false,

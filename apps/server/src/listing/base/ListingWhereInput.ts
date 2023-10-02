@@ -166,7 +166,7 @@ class ListingWhereInput {
   @Field(() => StringFilter, {
     nullable: true,
   })
-  numberOfBeds?: StringFilter;
+  numBeds?: StringFilter;
 
   @ApiProperty({
     required: false,

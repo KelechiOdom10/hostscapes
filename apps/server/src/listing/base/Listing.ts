@@ -136,7 +136,7 @@ class Listing {
   })
   @IsString()
   @Field(() => String)
-  numberOfBeds!: string;
+  numBeds!: string;
 
   @ApiProperty({
     required: true,
