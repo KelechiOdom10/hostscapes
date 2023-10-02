@@ -17,6 +17,7 @@ import { IsOptional, ValidateNested, IsEnum } from "class-validator";
 import { JsonFilter } from "../../util/JsonFilter";
 import { DateTimeFilter } from "../../util/DateTimeFilter";
 import { UserWhereUniqueInput } from "../../user/base/UserWhereUniqueInput";
+import { DecimalFilter } from "../../util/DecimalFilter";
 import { EnumListingListingType } from "./EnumListingListingType";
 import { IntFilter } from "../../util/IntFilter";
 import { TripListRelationFilter } from "../../trip/base/TripListRelationFilter";
@@ -104,6 +105,17 @@ class ListingWhereInput {
 
   @ApiProperty({
     required: false,
+    type: DecimalFilter,
+  })
+  @Type(() => DecimalFilter)
+  @IsOptional()
+  @Field(() => DecimalFilter, {
+    nullable: true,
+  })
+  latitude?: DecimalFilter;
+
+  @ApiProperty({
+    required: false,
     enum: EnumListingListingType,
   })
   @IsEnum(EnumListingListingType)
@@ -123,6 +135,17 @@ class ListingWhereInput {
     nullable: true,
   })
   location?: StringFilter;
+
+  @ApiProperty({
+    required: false,
+    type: DecimalFilter,
+  })
+  @Type(() => DecimalFilter)
+  @IsOptional()
+  @Field(() => DecimalFilter, {
+    nullable: true,
+  })
+  longitude?: DecimalFilter;
 
   @ApiProperty({
     required: false,

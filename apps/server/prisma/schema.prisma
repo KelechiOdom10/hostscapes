@@ -30,8 +30,10 @@ model Listing {
   host             User                   @relation(fields: [hostId], references: [id])
   hostId           String
   id               String                 @id @default(cuid())
+  latitude         Decimal
   listingType      EnumListingListingType
   location         String
+  longitude        Decimal
   maxGuests        Int
   numBaths         Int
   numBeds          Int

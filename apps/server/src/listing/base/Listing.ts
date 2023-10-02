@@ -9,12 +9,13 @@ https://docs.amplication.com/how-to/custom-code
 
 ------------------------------------------------------------------------------
   */
-import { ObjectType, Field } from "@nestjs/graphql";
+import { ObjectType, Field, Float } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import {
   IsString,
   IsDate,
   ValidateNested,
+  IsNumber,
   IsEnum,
   IsInt,
   IsOptional,
@@ -24,6 +25,7 @@ import { GraphQLJSON } from "graphql-type-json";
 import { JsonValue } from "type-fest";
 import { Type } from "class-transformer";
 import { User } from "../../user/base/User";
+import { Decimal } from "decimal.js";
 import { EnumListingListingType } from "./EnumListingListingType";
 import { Trip } from "../../trip/base/Trip";
 import { Wishlist } from "../../wishlist/base/Wishlist";
@@ -87,6 +89,14 @@ class Listing {
 
   @ApiProperty({
     required: true,
+    type: Number,
+  })
+  @IsNumber()
+  @Field(() => Float)
+  latitude!: Decimal;
+
+  @ApiProperty({
+    required: true,
     enum: EnumListingListingType,
   })
   @IsEnum(EnumListingListingType)
@@ -102,6 +112,14 @@ class Listing {
   @IsString()
   @Field(() => String)
   location!: string;
+
+  @ApiProperty({
+    required: true,
+    type: Number,
+  })
+  @IsNumber()
+  @Field(() => Float)
+  longitude!: Decimal;
 
   @ApiProperty({
     required: true,

@@ -105,6 +105,17 @@ class ListingOrderByInput {
   @Field(() => SortOrder, {
     nullable: true,
   })
+  latitude?: SortOrder;
+
+  @ApiProperty({
+    required: false,
+    enum: ["asc", "desc"],
+  })
+  @IsOptional()
+  @IsEnum(SortOrder)
+  @Field(() => SortOrder, {
+    nullable: true,
+  })
   listingType?: SortOrder;
 
   @ApiProperty({
@@ -117,6 +128,17 @@ class ListingOrderByInput {
     nullable: true,
   })
   location?: SortOrder;
+
+  @ApiProperty({
+    required: false,
+    enum: ["asc", "desc"],
+  })
+  @IsOptional()
+  @IsEnum(SortOrder)
+  @Field(() => SortOrder, {
+    nullable: true,
+  })
+  longitude?: SortOrder;
 
   @ApiProperty({
     required: false,

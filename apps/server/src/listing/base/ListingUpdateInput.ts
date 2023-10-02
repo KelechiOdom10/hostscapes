@@ -9,12 +9,13 @@ https://docs.amplication.com/how-to/custom-code
 
 ------------------------------------------------------------------------------
   */
-import { InputType, Field } from "@nestjs/graphql";
+import { InputType, Field, Float } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import {
   IsString,
   IsOptional,
   ValidateNested,
+  IsNumber,
   IsEnum,
   IsInt,
 } from "class-validator";
@@ -23,6 +24,7 @@ import { GraphQLJSON } from "graphql-type-json";
 import { InputJsonValue } from "../../types";
 import { UserWhereUniqueInput } from "../../user/base/UserWhereUniqueInput";
 import { Type } from "class-transformer";
+import { Decimal } from "decimal.js";
 import { EnumListingListingType } from "./EnumListingListingType";
 import { TripUpdateManyWithoutListingsInput } from "./TripUpdateManyWithoutListingsInput";
 import { WishlistUpdateManyWithoutListingsInput } from "./WishlistUpdateManyWithoutListingsInput";
@@ -86,6 +88,17 @@ class ListingUpdateInput {
 
   @ApiProperty({
     required: false,
+    type: Number,
+  })
+  @IsNumber()
+  @IsOptional()
+  @Field(() => Float, {
+    nullable: true,
+  })
+  latitude?: Decimal;
+
+  @ApiProperty({
+    required: false,
     enum: EnumListingListingType,
   })
   @IsEnum(EnumListingListingType)
@@ -105,6 +118,17 @@ class ListingUpdateInput {
     nullable: true,
   })
   location?: string;
+
+  @ApiProperty({
+    required: false,
+    type: Number,
+  })
+  @IsNumber()
+  @IsOptional()
+  @Field(() => Float, {
+    nullable: true,
+  })
+  longitude?: Decimal;
 
   @ApiProperty({
     required: false,
