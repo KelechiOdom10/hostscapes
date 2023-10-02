@@ -13,14 +13,15 @@ import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
 import { StringFilter } from "../../util/StringFilter";
 import { Type } from "class-transformer";
-import { IsOptional, ValidateNested, IsEnum } from "class-validator";
+import { IsOptional, IsEnum, ValidateNested } from "class-validator";
 import { JsonFilter } from "../../util/JsonFilter";
 import { DateTimeFilter } from "../../util/DateTimeFilter";
-import { UserWhereUniqueInput } from "../../user/base/UserWhereUniqueInput";
 import { DecimalFilter } from "../../util/DecimalFilter";
 import { EnumListingListingType } from "./EnumListingListingType";
 import { IntFilter } from "../../util/IntFilter";
+import { StringNullableFilter } from "../../util/StringNullableFilter";
 import { TripListRelationFilter } from "../../trip/base/TripListRelationFilter";
+import { UserWhereUniqueInput } from "../../user/base/UserWhereUniqueInput";
 import { WishlistListRelationFilter } from "../../wishlist/base/WishlistListRelationFilter";
 
 @InputType()
@@ -79,18 +80,6 @@ class ListingWhereInput {
     nullable: true,
   })
   description?: StringFilter;
-
-  @ApiProperty({
-    required: false,
-    type: () => UserWhereUniqueInput,
-  })
-  @ValidateNested()
-  @Type(() => UserWhereUniqueInput)
-  @IsOptional()
-  @Field(() => UserWhereUniqueInput, {
-    nullable: true,
-  })
-  host?: UserWhereUniqueInput;
 
   @ApiProperty({
     required: false,
@@ -167,7 +156,18 @@ class ListingWhereInput {
   @Field(() => IntFilter, {
     nullable: true,
   })
-  numBeds?: IntFilter;
+  numBedrooms?: IntFilter;
+
+  @ApiProperty({
+    required: false,
+    type: StringNullableFilter,
+  })
+  @Type(() => StringNullableFilter)
+  @IsOptional()
+  @Field(() => StringNullableFilter, {
+    nullable: true,
+  })
+  numberOfBeds?: StringNullableFilter;
 
   @ApiProperty({
     required: false,
@@ -246,6 +246,18 @@ class ListingWhereInput {
     nullable: true,
   })
   updatedAt?: DateTimeFilter;
+
+  @ApiProperty({
+    required: false,
+    type: () => UserWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => UserWhereUniqueInput)
+  @IsOptional()
+  @Field(() => UserWhereUniqueInput, {
+    nullable: true,
+  })
+  user?: UserWhereUniqueInput;
 
   @ApiProperty({
     required: false,

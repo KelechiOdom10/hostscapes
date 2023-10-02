@@ -14,20 +14,20 @@ import { ApiProperty } from "@nestjs/swagger";
 import {
   IsString,
   IsDate,
-  ValidateNested,
   IsNumber,
   IsEnum,
   IsOptional,
   IsInt,
+  ValidateNested,
 } from "class-validator";
 import { IsJSONValue } from "@app/custom-validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { JsonValue } from "type-fest";
 import { Type } from "class-transformer";
-import { User } from "../../user/base/User";
 import { Decimal } from "decimal.js";
 import { EnumListingListingType } from "./EnumListingListingType";
 import { Trip } from "../../trip/base/Trip";
+import { User } from "../../user/base/User";
 import { Wishlist } from "../../wishlist/base/Wishlist";
 
 @ObjectType()
@@ -70,14 +70,6 @@ class Listing {
   @IsString()
   @Field(() => String)
   description!: string;
-
-  @ApiProperty({
-    required: true,
-    type: () => User,
-  })
-  @ValidateNested()
-  @Type(() => User)
-  host?: User;
 
   @ApiProperty({
     required: true,
@@ -136,7 +128,18 @@ class Listing {
   })
   @IsInt()
   @Field(() => Number)
-  numBeds!: number;
+  numBedrooms!: number;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  numberOfBeds!: string | null;
 
   @ApiProperty({
     required: true,
@@ -193,6 +196,14 @@ class Listing {
   @Type(() => Date)
   @Field(() => Date)
   updatedAt!: Date;
+
+  @ApiProperty({
+    required: true,
+    type: () => User,
+  })
+  @ValidateNested()
+  @Type(() => User)
+  user?: User;
 
   @ApiProperty({
     required: false,

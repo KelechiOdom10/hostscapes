@@ -14,19 +14,19 @@ import { ApiProperty } from "@nestjs/swagger";
 import {
   IsString,
   IsOptional,
-  ValidateNested,
   IsNumber,
   IsEnum,
   IsInt,
+  ValidateNested,
 } from "class-validator";
 import { IsJSONValue } from "@app/custom-validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { InputJsonValue } from "../../types";
-import { UserWhereUniqueInput } from "../../user/base/UserWhereUniqueInput";
-import { Type } from "class-transformer";
 import { Decimal } from "decimal.js";
 import { EnumListingListingType } from "./EnumListingListingType";
 import { TripUpdateManyWithoutListingsInput } from "./TripUpdateManyWithoutListingsInput";
+import { Type } from "class-transformer";
+import { UserWhereUniqueInput } from "../../user/base/UserWhereUniqueInput";
 import { WishlistUpdateManyWithoutListingsInput } from "./WishlistUpdateManyWithoutListingsInput";
 
 @InputType()
@@ -73,18 +73,6 @@ class ListingUpdateInput {
     nullable: true,
   })
   description?: string;
-
-  @ApiProperty({
-    required: false,
-    type: () => UserWhereUniqueInput,
-  })
-  @ValidateNested()
-  @Type(() => UserWhereUniqueInput)
-  @IsOptional()
-  @Field(() => UserWhereUniqueInput, {
-    nullable: true,
-  })
-  host?: UserWhereUniqueInput;
 
   @ApiProperty({
     required: false,
@@ -150,7 +138,18 @@ class ListingUpdateInput {
   @Field(() => Number, {
     nullable: true,
   })
-  numBeds?: number;
+  numBedrooms?: number;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  numberOfBeds?: string | null;
 
   @ApiProperty({
     required: false,
@@ -217,6 +216,18 @@ class ListingUpdateInput {
     nullable: true,
   })
   trips?: TripUpdateManyWithoutListingsInput;
+
+  @ApiProperty({
+    required: false,
+    type: () => UserWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => UserWhereUniqueInput)
+  @IsOptional()
+  @Field(() => UserWhereUniqueInput, {
+    nullable: true,
+  })
+  user?: UserWhereUniqueInput;
 
   @ApiProperty({
     required: false,
