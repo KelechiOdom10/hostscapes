@@ -120,7 +120,18 @@ class ListingCreateInput {
   })
   @IsInt()
   @Field(() => Number)
-  numBeds!: number;
+  numBedrooms!: number;
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  numberOfBeds?: string | null;
 
   @ApiProperty({
     required: true,

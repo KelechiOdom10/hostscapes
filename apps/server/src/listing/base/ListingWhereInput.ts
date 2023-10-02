@@ -20,6 +20,7 @@ import { UserWhereUniqueInput } from "../../user/base/UserWhereUniqueInput";
 import { DecimalFilter } from "../../util/DecimalFilter";
 import { EnumListingListingType } from "./EnumListingListingType";
 import { IntFilter } from "../../util/IntFilter";
+import { StringNullableFilter } from "../../util/StringNullableFilter";
 import { TripListRelationFilter } from "../../trip/base/TripListRelationFilter";
 import { WishlistListRelationFilter } from "../../wishlist/base/WishlistListRelationFilter";
 
@@ -167,7 +168,18 @@ class ListingWhereInput {
   @Field(() => IntFilter, {
     nullable: true,
   })
-  numBeds?: IntFilter;
+  numBedrooms?: IntFilter;
+
+  @ApiProperty({
+    required: false,
+    type: StringNullableFilter,
+  })
+  @Type(() => StringNullableFilter)
+  @IsOptional()
+  @Field(() => StringNullableFilter, {
+    nullable: true,
+  })
+  numberOfBeds?: StringNullableFilter;
 
   @ApiProperty({
     required: false,
