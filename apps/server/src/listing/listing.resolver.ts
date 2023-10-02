@@ -12,6 +12,7 @@ import { ListingService } from "./listing.service";
 export class ListingResolver extends ListingResolverBase {
   constructor(
     protected readonly service: ListingService,
+    // @ts-expect-error ignore next line
     @nestAccessControl.InjectRolesBuilder()
     protected readonly rolesBuilder: nestAccessControl.RolesBuilder
   ) {

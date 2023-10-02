@@ -10,10 +10,10 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import { Module } from "@nestjs/common";
-import { MorganModule } from "nest-morgan";
+import { LoggerModule } from "nestjs-pino";
 import { ACLModule } from "../../auth/acl.module";
 @Module({
-  imports: [ACLModule, MorganModule],
-  exports: [ACLModule, MorganModule],
+  imports: [ACLModule, LoggerModule.forRoot()],
+  exports: [ACLModule, LoggerModule.forRoot()],
 })
 export class ListingModuleBase {}

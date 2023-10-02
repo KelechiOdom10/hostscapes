@@ -1,0 +1,484 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input Credentials {
+  password: String!
+  username: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input DateTimeFilter {
+  equals: DateTime
+  gt: DateTime
+  gte: DateTime
+  in: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  not: DateTime
+  notIn: [DateTime!]
+}
+
+input DecimalFilter {
+  equals: Float
+  gt: Float
+  gte: Float
+  in: [Float!]
+  lt: Float
+  lte: Float
+  not: Float
+  notIn: [Float!]
+}
+
+enum EnumListingListingType {
+  Apartment
+  House
+}
+
+input IntFilter {
+  equals: Int
+  gt: Int
+  gte: Int
+  in: [Int!]
+  lt: Int
+  lte: Int
+  not: Int
+  notIn: [Int!]
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+"""
+The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSONObject
+
+input JsonFilter {
+  equals: JSONObject
+  not: JSONObject
+}
+
+type Listing {
+  address: String!
+  amenities: JSON!
+  country: String!
+  createdAt: DateTime!
+  description: String!
+  id: String!
+  latitude: Float!
+  listingType: EnumListingListingType
+  longitude: Float!
+  maxGuests: Float!
+  numBaths: Float!
+  numBedrooms: Float!
+  numberOfBeds: String!
+  photos: JSON!
+  price: Float!
+  shortDescription: String!
+  slug: String!
+  title: String!
+  trips(orderBy: [TripOrderByInput!], skip: Float, take: Float, where: TripWhereInput): [Trip!]!
+  updatedAt: DateTime!
+  user: User
+  wishlists(orderBy: [WishlistOrderByInput!], skip: Float, take: Float, where: WishlistWhereInput): [Wishlist!]!
+}
+
+input ListingCreateInput {
+  address: String!
+  amenities: JSON!
+  country: String!
+  description: String!
+  latitude: Float!
+  listingType: EnumListingListingType
+  longitude: Float!
+  maxGuests: Float!
+  numBaths: Float!
+  numBedrooms: Float!
+  numberOfBeds: String!
+  photos: JSON!
+  price: Float!
+  shortDescription: String!
+  slug: String!
+  title: String!
+  trips: TripCreateNestedManyWithoutListingsInput
+  user: UserWhereUniqueInput!
+  wishlists: WishlistCreateNestedManyWithoutListingsInput
+}
+
+input ListingCreateNestedManyWithoutUsersInput {
+  connect: [ListingWhereUniqueInput!]
+}
+
+input ListingListRelationFilter {
+  every: ListingWhereInput
+  none: ListingWhereInput
+  some: ListingWhereInput
+}
+
+input ListingOrderByInput {
+  address: SortOrder
+  amenities: SortOrder
+  country: SortOrder
+  createdAt: SortOrder
+  description: SortOrder
+  id: SortOrder
+  latitude: SortOrder
+  listingType: SortOrder
+  longitude: SortOrder
+  maxGuests: SortOrder
+  numBaths: SortOrder
+  numBedrooms: SortOrder
+  numberOfBeds: SortOrder
+  photos: SortOrder
+  price: SortOrder
+  shortDescription: SortOrder
+  slug: SortOrder
+  title: SortOrder
+  updatedAt: SortOrder
+  userId: SortOrder
+}
+
+input ListingUpdateInput {
+  address: String
+  amenities: JSON
+  country: String
+  description: String
+  latitude: Float
+  listingType: EnumListingListingType
+  longitude: Float
+  maxGuests: Float
+  numBaths: Float
+  numBedrooms: Float
+  numberOfBeds: String
+  photos: JSON
+  price: Float
+  shortDescription: String
+  slug: String
+  title: String
+  trips: TripUpdateManyWithoutListingsInput
+  user: UserWhereUniqueInput
+  wishlists: WishlistUpdateManyWithoutListingsInput
+}
+
+input ListingUpdateManyWithoutUsersInput {
+  connect: [ListingWhereUniqueInput!]
+  disconnect: [ListingWhereUniqueInput!]
+  set: [ListingWhereUniqueInput!]
+}
+
+input ListingWhereInput {
+  address: StringFilter
+  amenities: JsonFilter
+  country: StringFilter
+  createdAt: DateTimeFilter
+  description: StringFilter
+  id: StringFilter
+  latitude: DecimalFilter
+  listingType: EnumListingListingType
+  longitude: DecimalFilter
+  maxGuests: IntFilter
+  numBaths: IntFilter
+  numBedrooms: IntFilter
+  numberOfBeds: StringFilter
+  photos: JsonFilter
+  price: IntFilter
+  shortDescription: StringFilter
+  slug: StringFilter
+  title: StringFilter
+  trips: TripListRelationFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereUniqueInput
+  wishlists: WishlistListRelationFilter
+}
+
+input ListingWhereUniqueInput {
+  id: String!
+}
+
+type MetaQueryPayload {
+  count: Float!
+}
+
+type Mutation {
+  createListing(data: ListingCreateInput!): Listing!
+  createTrip(data: TripCreateInput!): Trip!
+  createUser(data: UserCreateInput!): User!
+  createWishlist(data: WishlistCreateInput!): Wishlist!
+  deleteListing(where: ListingWhereUniqueInput!): Listing!
+  deleteTrip(where: TripWhereUniqueInput!): Trip!
+  deleteUser(where: UserWhereUniqueInput!): User!
+  deleteWishlist(where: WishlistWhereUniqueInput!): Wishlist!
+  login(credentials: Credentials!): UserInfo!
+  updateListing(data: ListingUpdateInput!, where: ListingWhereUniqueInput!): Listing!
+  updateTrip(data: TripUpdateInput!, where: TripWhereUniqueInput!): Trip!
+  updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User!
+  updateWishlist(data: WishlistUpdateInput!, where: WishlistWhereUniqueInput!): Wishlist!
+}
+
+type Query {
+  _listingsMeta(where: ListingWhereInput): MetaQueryPayload!
+  _tripsMeta(where: TripWhereInput): MetaQueryPayload!
+  _usersMeta(where: UserWhereInput): MetaQueryPayload!
+  _wishlistsMeta(where: WishlistWhereInput): MetaQueryPayload!
+  listing(where: ListingWhereUniqueInput!): Listing
+  listings(orderBy: [ListingOrderByInput!], skip: Float, take: Float, where: ListingWhereInput): [Listing!]!
+  trip(where: TripWhereUniqueInput!): Trip
+  trips(orderBy: [TripOrderByInput!], skip: Float, take: Float, where: TripWhereInput): [Trip!]!
+  user(where: UserWhereUniqueInput!): User
+  userInfo: UserInfo!
+  users(orderBy: [UserOrderByInput!], skip: Float, take: Float, where: UserWhereInput): [User!]!
+  wishlist(where: WishlistWhereUniqueInput!): Wishlist
+  wishlists(orderBy: [WishlistOrderByInput!], skip: Float, take: Float, where: WishlistWhereInput): [Wishlist!]!
+}
+
+enum QueryMode {
+  Default
+  Insensitive
+}
+
+enum SortOrder {
+  Asc
+  Desc
+}
+
+input StringFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  mode: QueryMode
+  not: String
+  notIn: [String!]
+  startsWith: String
+}
+
+input StringNullableFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  mode: QueryMode
+  not: String
+  notIn: [String!]
+  startsWith: String
+}
+
+type Trip {
+  createdAt: DateTime!
+  endDate: DateTime!
+  id: String!
+  listing: Listing
+  startDate: DateTime!
+  updatedAt: DateTime!
+  user: User
+}
+
+input TripCreateInput {
+  endDate: DateTime!
+  listing: ListingWhereUniqueInput!
+  startDate: DateTime!
+  user: UserWhereUniqueInput!
+}
+
+input TripCreateNestedManyWithoutListingsInput {
+  connect: [TripWhereUniqueInput!]
+}
+
+input TripCreateNestedManyWithoutUsersInput {
+  connect: [TripWhereUniqueInput!]
+}
+
+input TripListRelationFilter {
+  every: TripWhereInput
+  none: TripWhereInput
+  some: TripWhereInput
+}
+
+input TripOrderByInput {
+  createdAt: SortOrder
+  endDate: SortOrder
+  id: SortOrder
+  listingId: SortOrder
+  startDate: SortOrder
+  updatedAt: SortOrder
+  userId: SortOrder
+}
+
+input TripUpdateInput {
+  endDate: DateTime
+  listing: ListingWhereUniqueInput
+  startDate: DateTime
+  user: UserWhereUniqueInput
+}
+
+input TripUpdateManyWithoutListingsInput {
+  connect: [TripWhereUniqueInput!]
+  disconnect: [TripWhereUniqueInput!]
+  set: [TripWhereUniqueInput!]
+}
+
+input TripUpdateManyWithoutUsersInput {
+  connect: [TripWhereUniqueInput!]
+  disconnect: [TripWhereUniqueInput!]
+  set: [TripWhereUniqueInput!]
+}
+
+input TripWhereInput {
+  createdAt: DateTimeFilter
+  endDate: DateTimeFilter
+  id: StringFilter
+  listing: ListingWhereUniqueInput
+  startDate: DateTimeFilter
+  updatedAt: DateTimeFilter
+  user: UserWhereUniqueInput
+}
+
+input TripWhereUniqueInput {
+  id: String!
+}
+
+type User {
+  createdAt: DateTime!
+  firstName: String
+  id: String!
+  lastName: String
+  listings(orderBy: [ListingOrderByInput!], skip: Float, take: Float, where: ListingWhereInput): [Listing!]!
+  roles: JSON!
+  trips(orderBy: [TripOrderByInput!], skip: Float, take: Float, where: TripWhereInput): [Trip!]!
+  updatedAt: DateTime!
+  username: String!
+  wishlists(orderBy: [WishlistOrderByInput!], skip: Float, take: Float, where: WishlistWhereInput): [Wishlist!]!
+}
+
+input UserCreateInput {
+  firstName: String
+  lastName: String
+  listings: ListingCreateNestedManyWithoutUsersInput
+  password: String!
+  roles: JSON!
+  trips: TripCreateNestedManyWithoutUsersInput
+  username: String!
+  wishlists: WishlistCreateNestedManyWithoutUsersInput
+}
+
+type UserInfo {
+  accessToken: String
+  id: String!
+  roles: [String!]!
+  username: String!
+}
+
+input UserOrderByInput {
+  createdAt: SortOrder
+  firstName: SortOrder
+  id: SortOrder
+  lastName: SortOrder
+  password: SortOrder
+  roles: SortOrder
+  updatedAt: SortOrder
+  username: SortOrder
+}
+
+input UserUpdateInput {
+  firstName: String
+  lastName: String
+  listings: ListingUpdateManyWithoutUsersInput
+  password: String
+  roles: JSON
+  trips: TripUpdateManyWithoutUsersInput
+  username: String
+  wishlists: WishlistUpdateManyWithoutUsersInput
+}
+
+input UserWhereInput {
+  firstName: StringNullableFilter
+  id: StringFilter
+  lastName: StringNullableFilter
+  listings: ListingListRelationFilter
+  trips: TripListRelationFilter
+  username: StringFilter
+  wishlists: WishlistListRelationFilter
+}
+
+input UserWhereUniqueInput {
+  id: String!
+}
+
+type Wishlist {
+  createdAt: DateTime!
+  id: String!
+  listing: Listing
+  updatedAt: DateTime!
+  user: User
+}
+
+input WishlistCreateInput {
+  listing: ListingWhereUniqueInput!
+  user: UserWhereUniqueInput!
+}
+
+input WishlistCreateNestedManyWithoutListingsInput {
+  connect: [WishlistWhereUniqueInput!]
+}
+
+input WishlistCreateNestedManyWithoutUsersInput {
+  connect: [WishlistWhereUniqueInput!]
+}
+
+input WishlistListRelationFilter {
+  every: WishlistWhereInput
+  none: WishlistWhereInput
+  some: WishlistWhereInput
+}
+
+input WishlistOrderByInput {
+  createdAt: SortOrder
+  id: SortOrder
+  listingId: SortOrder
+  updatedAt: SortOrder
+  userId: SortOrder
+}
+
+input WishlistUpdateInput {
+  listing: ListingWhereUniqueInput
+  user: UserWhereUniqueInput
+}
+
+input WishlistUpdateManyWithoutListingsInput {
+  connect: [WishlistWhereUniqueInput!]
+  disconnect: [WishlistWhereUniqueInput!]
+  set: [WishlistWhereUniqueInput!]
+}
+
+input WishlistUpdateManyWithoutUsersInput {
+  connect: [WishlistWhereUniqueInput!]
+  disconnect: [WishlistWhereUniqueInput!]
+  set: [WishlistWhereUniqueInput!]
+}
+
+input WishlistWhereInput {
+  createdAt: DateTimeFilter
+  id: StringFilter
+  listing: ListingWhereUniqueInput
+  updatedAt: DateTimeFilter
+  user: UserWhereUniqueInput
+}
+
+input WishlistWhereUniqueInput {
+  id: String!
+}

@@ -10,7 +10,6 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import * as graphql from "@nestjs/graphql";
-import * as apollo from "apollo-server-express";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
 import * as nestAccessControl from "nest-access-control";
@@ -34,6 +33,7 @@ import { Trip } from "../../trip/base/Trip";
 import { WishlistFindManyArgs } from "../../wishlist/base/WishlistFindManyArgs";
 import { Wishlist } from "../../wishlist/base/Wishlist";
 import { UserService } from "../user.service";
+import { GraphQLError } from "graphql";
 @common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
 @graphql.Resolver(() => User)
 export class UserResolverBase {
@@ -64,13 +64,13 @@ export class UserResolverBase {
     action: "read",
     possession: "any",
   })
-  async users(@graphql.Args() args: UserFindManyArgs): Promise<User[]> {
+  async users(@graphql.Args() args: UserFindManyArgs) {
     return this.service.findMany(args);
   }
 
   @Public()
   @graphql.Query(() => User, { nullable: true })
-  async user(@graphql.Args() args: UserFindUniqueArgs): Promise<User | null> {
+  async user(@graphql.Args() args: UserFindUniqueArgs) {
     const result = await this.service.findOne(args);
     if (result === null) {
       return null;
@@ -80,7 +80,16 @@ export class UserResolverBase {
 
   @Public()
   @graphql.Mutation(() => User)
-  async createUser(@graphql.Args() args: CreateUserArgs): Promise<User> {
+  async createUser(@graphql.Args() args: CreateUserArgs) {
+    const user = await this.service.findOne({
+      where: { username: args.data.username },
+    });
+    if (user) {
+      throw new common.ConflictException(
+        `User with username ${args.data.username} already exists`
+      );
+    }
+
     return await this.service.create({
       ...args,
       data: args.data,
@@ -94,15 +103,15 @@ export class UserResolverBase {
     action: "update",
     possession: "any",
   })
-  async updateUser(@graphql.Args() args: UpdateUserArgs): Promise<User | null> {
+  async updateUser(@graphql.Args() args: UpdateUserArgs) {
     try {
       return await this.service.update({
         ...args,
         data: args.data,
       });
-    } catch (error) {
+    } catch (error: any) {
       if (isRecordNotFoundError(error)) {
-        throw new apollo.ApolloError(
+        throw new GraphQLError(
           `No resource was found for ${JSON.stringify(args.where)}`
         );
       }
@@ -116,12 +125,12 @@ export class UserResolverBase {
     action: "delete",
     possession: "any",
   })
-  async deleteUser(@graphql.Args() args: DeleteUserArgs): Promise<User | null> {
+  async deleteUser(@graphql.Args() args: DeleteUserArgs) {
     try {
       return await this.service.delete(args);
-    } catch (error) {
+    } catch (error: any) {
       if (isRecordNotFoundError(error)) {
-        throw new apollo.ApolloError(
+        throw new GraphQLError(
           `No resource was found for ${JSON.stringify(args.where)}`
         );
       }
@@ -134,7 +143,7 @@ export class UserResolverBase {
   async resolveFieldListings(
     @graphql.Parent() parent: User,
     @graphql.Args() args: ListingFindManyArgs
-  ): Promise<Listing[]> {
+  ) {
     const results = await this.service.findListings(parent.id, args);
 
     if (!results) {
@@ -154,7 +163,7 @@ export class UserResolverBase {
   async resolveFieldTrips(
     @graphql.Parent() parent: User,
     @graphql.Args() args: TripFindManyArgs
-  ): Promise<Trip[]> {
+  ) {
     const results = await this.service.findTrips(parent.id, args);
 
     if (!results) {

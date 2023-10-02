@@ -12,6 +12,7 @@ import { WishlistService } from "./wishlist.service";
 export class WishlistResolver extends WishlistResolverBase {
   constructor(
     protected readonly service: WishlistService,
+    // @ts-expect-error ignore next line
     @nestAccessControl.InjectRolesBuilder()
     protected readonly rolesBuilder: nestAccessControl.RolesBuilder
   ) {
