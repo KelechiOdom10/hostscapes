@@ -39,6 +39,17 @@ class TripOrderByInput {
   @Field(() => SortOrder, {
     nullable: true,
   })
+  endDate?: SortOrder;
+
+  @ApiProperty({
+    required: false,
+    enum: ["asc", "desc"],
+  })
+  @IsOptional()
+  @IsEnum(SortOrder)
+  @Field(() => SortOrder, {
+    nullable: true,
+  })
   id?: SortOrder;
 
   @ApiProperty({
@@ -61,7 +72,7 @@ class TripOrderByInput {
   @Field(() => SortOrder, {
     nullable: true,
   })
-  tripData?: SortOrder;
+  startDate?: SortOrder;
 
   @ApiProperty({
     required: false,

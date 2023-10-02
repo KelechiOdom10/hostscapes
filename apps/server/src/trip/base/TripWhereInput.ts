@@ -16,7 +16,6 @@ import { Type } from "class-transformer";
 import { IsOptional, ValidateNested } from "class-validator";
 import { StringFilter } from "../../util/StringFilter";
 import { ListingWhereUniqueInput } from "../../listing/base/ListingWhereUniqueInput";
-import { JsonFilter } from "../../util/JsonFilter";
 import { UserWhereUniqueInput } from "../../user/base/UserWhereUniqueInput";
 
 @InputType()
@@ -31,6 +30,17 @@ class TripWhereInput {
     nullable: true,
   })
   createdAt?: DateTimeFilter;
+
+  @ApiProperty({
+    required: false,
+    type: DateTimeFilter,
+  })
+  @Type(() => DateTimeFilter)
+  @IsOptional()
+  @Field(() => DateTimeFilter, {
+    nullable: true,
+  })
+  endDate?: DateTimeFilter;
 
   @ApiProperty({
     required: false,
@@ -57,14 +67,14 @@ class TripWhereInput {
 
   @ApiProperty({
     required: false,
-    type: JsonFilter,
+    type: DateTimeFilter,
   })
-  @Type(() => JsonFilter)
+  @Type(() => DateTimeFilter)
   @IsOptional()
-  @Field(() => JsonFilter, {
+  @Field(() => DateTimeFilter, {
     nullable: true,
   })
-  tripData?: JsonFilter;
+  startDate?: DateTimeFilter;
 
   @ApiProperty({
     required: false,
