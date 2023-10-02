@@ -12,6 +12,7 @@ import { Reflector } from "@nestjs/core";
 @Injectable()
 export class AclFilterResponseInterceptor implements NestInterceptor {
   constructor(
+    // @ts-expect-error ignore next line
     @InjectRolesBuilder() private readonly rolesBuilder: RolesBuilder,
     private readonly reflector: Reflector
   ) {}

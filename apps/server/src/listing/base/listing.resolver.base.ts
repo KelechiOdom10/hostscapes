@@ -10,7 +10,6 @@ https://docs.amplication.com/how-to/custom-code
 ------------------------------------------------------------------------------
   */
 import * as graphql from "@nestjs/graphql";
-import * as apollo from "apollo-server-express";
 import { isRecordNotFoundError } from "../../prisma.util";
 import { MetaQueryPayload } from "../../util/MetaQueryPayload";
 import * as nestAccessControl from "nest-access-control";
@@ -33,6 +32,8 @@ import { WishlistFindManyArgs } from "../../wishlist/base/WishlistFindManyArgs";
 import { Wishlist } from "../../wishlist/base/Wishlist";
 import { User } from "../../user/base/User";
 import { ListingService } from "../listing.service";
+import { GraphQLError } from "graphql";
+
 @common.UseGuards(GqlDefaultAuthGuard, gqlACGuard.GqlACGuard)
 @graphql.Resolver(() => Listing)
 export class ListingResolverBase {
@@ -54,17 +55,13 @@ export class ListingResolverBase {
 
   @Public()
   @graphql.Query(() => [Listing])
-  async listings(
-    @graphql.Args() args: ListingFindManyArgs
-  ): Promise<Listing[]> {
+  async listings(@graphql.Args() args: ListingFindManyArgs) {
     return this.service.findMany(args);
   }
 
   @Public()
   @graphql.Query(() => Listing, { nullable: true })
-  async listing(
-    @graphql.Args() args: ListingFindUniqueArgs
-  ): Promise<Listing | null> {
+  async listing(@graphql.Args() args: ListingFindUniqueArgs) {
     const result = await this.service.findOne(args);
     if (result === null) {
       return null;
@@ -79,9 +76,7 @@ export class ListingResolverBase {
     action: "create",
     possession: "any",
   })
-  async createListing(
-    @graphql.Args() args: CreateListingArgs
-  ): Promise<Listing> {
+  async createListing(@graphql.Args() args: CreateListingArgs) {
     return await this.service.create({
       ...args,
       data: {
@@ -101,9 +96,7 @@ export class ListingResolverBase {
     action: "update",
     possession: "any",
   })
-  async updateListing(
-    @graphql.Args() args: UpdateListingArgs
-  ): Promise<Listing | null> {
+  async updateListing(@graphql.Args() args: UpdateListingArgs) {
     try {
       return await this.service.update({
         ...args,
@@ -115,9 +108,9 @@ export class ListingResolverBase {
           },
         },
       });
-    } catch (error) {
+    } catch (error: any) {
       if (isRecordNotFoundError(error)) {
-        throw new apollo.ApolloError(
+        throw new GraphQLError(
           `No resource was found for ${JSON.stringify(args.where)}`
         );
       }
@@ -131,14 +124,12 @@ export class ListingResolverBase {
     action: "delete",
     possession: "any",
   })
-  async deleteListing(
-    @graphql.Args() args: DeleteListingArgs
-  ): Promise<Listing | null> {
+  async deleteListing(@graphql.Args() args: DeleteListingArgs) {
     try {
       return await this.service.delete(args);
-    } catch (error) {
+    } catch (error: any) {
       if (isRecordNotFoundError(error)) {
-        throw new apollo.ApolloError(
+        throw new GraphQLError(
           `No resource was found for ${JSON.stringify(args.where)}`
         );
       }
@@ -156,7 +147,7 @@ export class ListingResolverBase {
   async resolveFieldTrips(
     @graphql.Parent() parent: Listing,
     @graphql.Args() args: TripFindManyArgs
-  ): Promise<Trip[]> {
+  ) {
     const results = await this.service.findTrips(parent.id, args);
 
     if (!results) {
@@ -191,10 +182,8 @@ export class ListingResolverBase {
     nullable: true,
     name: "host",
   })
-  async resolveFieldHost(
-    @graphql.Parent() parent: Listing
-  ): Promise<User | null> {
-    const result = await this.service.getHost(parent.id);
+  async resolveFieldUser(@graphql.Parent() parent: Listing) {
+    const result = await this.service.getUser(parent.id);
 
     if (!result) {
       return null;
