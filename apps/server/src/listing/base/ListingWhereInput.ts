@@ -11,18 +11,52 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { DateTimeFilter } from "../../util/DateTimeFilter";
-import { Type } from "class-transformer";
-import { IsOptional, ValidateNested } from "class-validator";
 import { StringFilter } from "../../util/StringFilter";
+import { Type } from "class-transformer";
+import { IsOptional, ValidateNested, IsEnum } from "class-validator";
 import { JsonFilter } from "../../util/JsonFilter";
+import { DateTimeFilter } from "../../util/DateTimeFilter";
+import { UserWhereUniqueInput } from "../../user/base/UserWhereUniqueInput";
+import { EnumListingListingType } from "./EnumListingListingType";
 import { IntFilter } from "../../util/IntFilter";
 import { TripListRelationFilter } from "../../trip/base/TripListRelationFilter";
-import { UserWhereUniqueInput } from "../../user/base/UserWhereUniqueInput";
 import { WishlistListRelationFilter } from "../../wishlist/base/WishlistListRelationFilter";
 
 @InputType()
 class ListingWhereInput {
+  @ApiProperty({
+    required: false,
+    type: StringFilter,
+  })
+  @Type(() => StringFilter)
+  @IsOptional()
+  @Field(() => StringFilter, {
+    nullable: true,
+  })
+  address?: StringFilter;
+
+  @ApiProperty({
+    required: false,
+    type: JsonFilter,
+  })
+  @Type(() => JsonFilter)
+  @IsOptional()
+  @Field(() => JsonFilter, {
+    nullable: true,
+  })
+  amenities?: JsonFilter;
+
+  @ApiProperty({
+    required: false,
+    type: StringFilter,
+  })
+  @Type(() => StringFilter)
+  @IsOptional()
+  @Field(() => StringFilter, {
+    nullable: true,
+  })
+  country?: StringFilter;
+
   @ApiProperty({
     required: false,
     type: DateTimeFilter,
@@ -47,6 +81,18 @@ class ListingWhereInput {
 
   @ApiProperty({
     required: false,
+    type: () => UserWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => UserWhereUniqueInput)
+  @IsOptional()
+  @Field(() => UserWhereUniqueInput, {
+    nullable: true,
+  })
+  host?: UserWhereUniqueInput;
+
+  @ApiProperty({
+    required: false,
     type: StringFilter,
   })
   @Type(() => StringFilter)
@@ -58,14 +104,14 @@ class ListingWhereInput {
 
   @ApiProperty({
     required: false,
-    type: JsonFilter,
+    enum: EnumListingListingType,
   })
-  @Type(() => JsonFilter)
+  @IsEnum(EnumListingListingType)
   @IsOptional()
-  @Field(() => JsonFilter, {
+  @Field(() => EnumListingListingType, {
     nullable: true,
   })
-  locationData?: JsonFilter;
+  listingType?: "Apartment" | "House";
 
   @ApiProperty({
     required: false,
@@ -76,18 +122,40 @@ class ListingWhereInput {
   @Field(() => StringFilter, {
     nullable: true,
   })
-  locationType?: StringFilter;
+  location?: StringFilter;
 
   @ApiProperty({
     required: false,
-    type: JsonFilter,
+    type: IntFilter,
   })
-  @Type(() => JsonFilter)
+  @Type(() => IntFilter)
   @IsOptional()
-  @Field(() => JsonFilter, {
+  @Field(() => IntFilter, {
     nullable: true,
   })
-  mapData?: JsonFilter;
+  maxGuests?: IntFilter;
+
+  @ApiProperty({
+    required: false,
+    type: IntFilter,
+  })
+  @Type(() => IntFilter)
+  @IsOptional()
+  @Field(() => IntFilter, {
+    nullable: true,
+  })
+  numBaths?: IntFilter;
+
+  @ApiProperty({
+    required: false,
+    type: IntFilter,
+  })
+  @Type(() => IntFilter)
+  @IsOptional()
+  @Field(() => IntFilter, {
+    nullable: true,
+  })
+  numBeds?: IntFilter;
 
   @ApiProperty({
     required: false,
@@ -102,25 +170,14 @@ class ListingWhereInput {
 
   @ApiProperty({
     required: false,
-    type: JsonFilter,
+    type: IntFilter,
   })
-  @Type(() => JsonFilter)
+  @Type(() => IntFilter)
   @IsOptional()
-  @Field(() => JsonFilter, {
+  @Field(() => IntFilter, {
     nullable: true,
   })
-  placeAmeneites?: JsonFilter;
-
-  @ApiProperty({
-    required: false,
-    type: JsonFilter,
-  })
-  @Type(() => JsonFilter)
-  @IsOptional()
-  @Field(() => JsonFilter, {
-    nullable: true,
-  })
-  placeSpace?: JsonFilter;
+  price?: IntFilter;
 
   @ApiProperty({
     required: false,
@@ -131,18 +188,18 @@ class ListingWhereInput {
   @Field(() => StringFilter, {
     nullable: true,
   })
-  placetype?: StringFilter;
+  shortDescription?: StringFilter;
 
   @ApiProperty({
     required: false,
-    type: IntFilter,
+    type: StringFilter,
   })
-  @Type(() => IntFilter)
+  @Type(() => StringFilter)
   @IsOptional()
-  @Field(() => IntFilter, {
+  @Field(() => StringFilter, {
     nullable: true,
   })
-  price?: IntFilter;
+  slug?: StringFilter;
 
   @ApiProperty({
     required: false,
@@ -177,18 +234,6 @@ class ListingWhereInput {
     nullable: true,
   })
   updatedAt?: DateTimeFilter;
-
-  @ApiProperty({
-    required: false,
-    type: () => UserWhereUniqueInput,
-  })
-  @ValidateNested()
-  @Type(() => UserWhereUniqueInput)
-  @IsOptional()
-  @Field(() => UserWhereUniqueInput, {
-    nullable: true,
-  })
-  user?: UserWhereUniqueInput;
 
   @ApiProperty({
     required: false,

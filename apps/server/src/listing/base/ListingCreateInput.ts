@@ -11,13 +11,20 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsInt, ValidateNested, IsOptional } from "class-validator";
+import {
+  IsString,
+  ValidateNested,
+  IsEnum,
+  IsInt,
+  IsOptional,
+} from "class-validator";
 import { IsJSONValue } from "@app/custom-validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { InputJsonValue } from "../../types";
-import { TripCreateNestedManyWithoutListingsInput } from "./TripCreateNestedManyWithoutListingsInput";
-import { Type } from "class-transformer";
 import { UserWhereUniqueInput } from "../../user/base/UserWhereUniqueInput";
+import { Type } from "class-transformer";
+import { EnumListingListingType } from "./EnumListingListingType";
+import { TripCreateNestedManyWithoutListingsInput } from "./TripCreateNestedManyWithoutListingsInput";
 import { WishlistCreateNestedManyWithoutListingsInput } from "./WishlistCreateNestedManyWithoutListingsInput";
 
 @InputType()
@@ -28,14 +35,14 @@ class ListingCreateInput {
   })
   @IsString()
   @Field(() => String)
-  description!: string;
+  address!: string;
 
   @ApiProperty({
     required: true,
   })
   @IsJSONValue()
   @Field(() => GraphQLJSON)
-  locationData!: InputJsonValue;
+  amenities!: InputJsonValue;
 
   @ApiProperty({
     required: true,
@@ -43,14 +50,64 @@ class ListingCreateInput {
   })
   @IsString()
   @Field(() => String)
-  locationType!: string;
+  country!: string;
 
   @ApiProperty({
     required: true,
+    type: String,
   })
-  @IsJSONValue()
-  @Field(() => GraphQLJSON)
-  mapData!: InputJsonValue;
+  @IsString()
+  @Field(() => String)
+  description!: string;
+
+  @ApiProperty({
+    required: true,
+    type: () => UserWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => UserWhereUniqueInput)
+  @Field(() => UserWhereUniqueInput)
+  host!: UserWhereUniqueInput;
+
+  @ApiProperty({
+    required: true,
+    enum: EnumListingListingType,
+  })
+  @IsEnum(EnumListingListingType)
+  @Field(() => EnumListingListingType)
+  listingType!: "Apartment" | "House";
+
+  @ApiProperty({
+    required: true,
+    type: String,
+  })
+  @IsString()
+  @Field(() => String)
+  location!: string;
+
+  @ApiProperty({
+    required: true,
+    type: Number,
+  })
+  @IsInt()
+  @Field(() => Number)
+  maxGuests!: number;
+
+  @ApiProperty({
+    required: true,
+    type: Number,
+  })
+  @IsInt()
+  @Field(() => Number)
+  numBaths!: number;
+
+  @ApiProperty({
+    required: true,
+    type: Number,
+  })
+  @IsInt()
+  @Field(() => Number)
+  numBeds!: number;
 
   @ApiProperty({
     required: true,
@@ -61,17 +118,11 @@ class ListingCreateInput {
 
   @ApiProperty({
     required: true,
+    type: Number,
   })
-  @IsJSONValue()
-  @Field(() => GraphQLJSON)
-  placeAmeneites!: InputJsonValue;
-
-  @ApiProperty({
-    required: true,
-  })
-  @IsJSONValue()
-  @Field(() => GraphQLJSON)
-  placeSpace!: InputJsonValue;
+  @IsInt()
+  @Field(() => Number)
+  price!: number;
 
   @ApiProperty({
     required: true,
@@ -79,15 +130,15 @@ class ListingCreateInput {
   })
   @IsString()
   @Field(() => String)
-  placetype!: string;
+  shortDescription!: string;
 
   @ApiProperty({
     required: true,
-    type: Number,
+    type: String,
   })
-  @IsInt()
-  @Field(() => Number)
-  price!: number;
+  @IsString()
+  @Field(() => String)
+  slug!: string;
 
   @ApiProperty({
     required: true,
@@ -108,15 +159,6 @@ class ListingCreateInput {
     nullable: true,
   })
   trips?: TripCreateNestedManyWithoutListingsInput;
-
-  @ApiProperty({
-    required: true,
-    type: () => UserWhereUniqueInput,
-  })
-  @ValidateNested()
-  @Type(() => UserWhereUniqueInput)
-  @Field(() => UserWhereUniqueInput)
-  user!: UserWhereUniqueInput;
 
   @ApiProperty({
     required: false,

@@ -11,13 +11,20 @@ https://docs.amplication.com/how-to/custom-code
   */
 import { InputType, Field } from "@nestjs/graphql";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, IsOptional, IsInt, ValidateNested } from "class-validator";
+import {
+  IsString,
+  IsOptional,
+  ValidateNested,
+  IsEnum,
+  IsInt,
+} from "class-validator";
 import { IsJSONValue } from "@app/custom-validators";
 import { GraphQLJSON } from "graphql-type-json";
 import { InputJsonValue } from "../../types";
-import { TripUpdateManyWithoutListingsInput } from "./TripUpdateManyWithoutListingsInput";
-import { Type } from "class-transformer";
 import { UserWhereUniqueInput } from "../../user/base/UserWhereUniqueInput";
+import { Type } from "class-transformer";
+import { EnumListingListingType } from "./EnumListingListingType";
+import { TripUpdateManyWithoutListingsInput } from "./TripUpdateManyWithoutListingsInput";
 import { WishlistUpdateManyWithoutListingsInput } from "./WishlistUpdateManyWithoutListingsInput";
 
 @InputType()
@@ -31,7 +38,7 @@ class ListingUpdateInput {
   @Field(() => String, {
     nullable: true,
   })
-  description?: string;
+  address?: string;
 
   @ApiProperty({
     required: false,
@@ -41,7 +48,7 @@ class ListingUpdateInput {
   @Field(() => GraphQLJSON, {
     nullable: true,
   })
-  locationData?: InputJsonValue;
+  amenities?: InputJsonValue;
 
   @ApiProperty({
     required: false,
@@ -52,17 +59,85 @@ class ListingUpdateInput {
   @Field(() => String, {
     nullable: true,
   })
-  locationType?: string;
+  country?: string;
 
   @ApiProperty({
     required: false,
+    type: String,
   })
-  @IsJSONValue()
+  @IsString()
   @IsOptional()
-  @Field(() => GraphQLJSON, {
+  @Field(() => String, {
     nullable: true,
   })
-  mapData?: InputJsonValue;
+  description?: string;
+
+  @ApiProperty({
+    required: false,
+    type: () => UserWhereUniqueInput,
+  })
+  @ValidateNested()
+  @Type(() => UserWhereUniqueInput)
+  @IsOptional()
+  @Field(() => UserWhereUniqueInput, {
+    nullable: true,
+  })
+  host?: UserWhereUniqueInput;
+
+  @ApiProperty({
+    required: false,
+    enum: EnumListingListingType,
+  })
+  @IsEnum(EnumListingListingType)
+  @IsOptional()
+  @Field(() => EnumListingListingType, {
+    nullable: true,
+  })
+  listingType?: "Apartment" | "House";
+
+  @ApiProperty({
+    required: false,
+    type: String,
+  })
+  @IsString()
+  @IsOptional()
+  @Field(() => String, {
+    nullable: true,
+  })
+  location?: string;
+
+  @ApiProperty({
+    required: false,
+    type: Number,
+  })
+  @IsInt()
+  @IsOptional()
+  @Field(() => Number, {
+    nullable: true,
+  })
+  maxGuests?: number;
+
+  @ApiProperty({
+    required: false,
+    type: Number,
+  })
+  @IsInt()
+  @IsOptional()
+  @Field(() => Number, {
+    nullable: true,
+  })
+  numBaths?: number;
+
+  @ApiProperty({
+    required: false,
+    type: Number,
+  })
+  @IsInt()
+  @IsOptional()
+  @Field(() => Number, {
+    nullable: true,
+  })
+  numBeds?: number;
 
   @ApiProperty({
     required: false,
@@ -76,23 +151,14 @@ class ListingUpdateInput {
 
   @ApiProperty({
     required: false,
+    type: Number,
   })
-  @IsJSONValue()
+  @IsInt()
   @IsOptional()
-  @Field(() => GraphQLJSON, {
+  @Field(() => Number, {
     nullable: true,
   })
-  placeAmeneites?: InputJsonValue;
-
-  @ApiProperty({
-    required: false,
-  })
-  @IsJSONValue()
-  @IsOptional()
-  @Field(() => GraphQLJSON, {
-    nullable: true,
-  })
-  placeSpace?: InputJsonValue;
+  price?: number;
 
   @ApiProperty({
     required: false,
@@ -103,18 +169,18 @@ class ListingUpdateInput {
   @Field(() => String, {
     nullable: true,
   })
-  placetype?: string;
+  shortDescription?: string;
 
   @ApiProperty({
     required: false,
-    type: Number,
+    type: String,
   })
-  @IsInt()
+  @IsString()
   @IsOptional()
-  @Field(() => Number, {
+  @Field(() => String, {
     nullable: true,
   })
-  price?: number;
+  slug?: string;
 
   @ApiProperty({
     required: false,
@@ -138,18 +204,6 @@ class ListingUpdateInput {
     nullable: true,
   })
   trips?: TripUpdateManyWithoutListingsInput;
-
-  @ApiProperty({
-    required: false,
-    type: () => UserWhereUniqueInput,
-  })
-  @ValidateNested()
-  @Type(() => UserWhereUniqueInput)
-  @IsOptional()
-  @Field(() => UserWhereUniqueInput, {
-    nullable: true,
-  })
-  user?: UserWhereUniqueInput;
 
   @ApiProperty({
     required: false,

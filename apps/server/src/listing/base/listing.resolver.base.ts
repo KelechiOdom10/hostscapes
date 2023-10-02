@@ -87,8 +87,8 @@ export class ListingResolverBase {
       data: {
         ...args.data,
 
-        user: {
-          connect: args.data.user,
+        host: {
+          connect: args.data.host,
         },
       },
     });
@@ -110,8 +110,8 @@ export class ListingResolverBase {
         data: {
           ...args.data,
 
-          user: {
-            connect: args.data.user,
+          host: {
+            connect: args.data.host,
           },
         },
       });
@@ -189,12 +189,12 @@ export class ListingResolverBase {
   @Public()
   @graphql.ResolveField(() => User, {
     nullable: true,
-    name: "user",
+    name: "host",
   })
-  async resolveFieldUser(
+  async resolveFieldHost(
     @graphql.Parent() parent: Listing
   ): Promise<User | null> {
-    const result = await this.service.getUser(parent.id);
+    const result = await this.service.getHost(parent.id);
 
     if (!result) {
       return null;
