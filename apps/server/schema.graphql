@@ -78,7 +78,7 @@ type Listing {
   maxGuests: Float!
   numBaths: Float!
   numBedrooms: Float!
-  numberOfBeds: String!
+  numBeds: String!
   photos: JSON!
   price: Float!
   shortDescription: String!
@@ -101,7 +101,7 @@ input ListingCreateInput {
   maxGuests: Float!
   numBaths: Float!
   numBedrooms: Float!
-  numberOfBeds: String!
+  numBeds: String!
   photos: JSON!
   price: Float!
   shortDescription: String!
@@ -135,7 +135,7 @@ input ListingOrderByInput {
   maxGuests: SortOrder
   numBaths: SortOrder
   numBedrooms: SortOrder
-  numberOfBeds: SortOrder
+  numBeds: SortOrder
   photos: SortOrder
   price: SortOrder
   shortDescription: SortOrder
@@ -156,7 +156,7 @@ input ListingUpdateInput {
   maxGuests: Float
   numBaths: Float
   numBedrooms: Float
-  numberOfBeds: String
+  numBeds: String
   photos: JSON
   price: Float
   shortDescription: String
@@ -186,7 +186,7 @@ input ListingWhereInput {
   maxGuests: IntFilter
   numBaths: IntFilter
   numBedrooms: IntFilter
-  numberOfBeds: StringFilter
+  numBeds: StringFilter
   photos: JsonFilter
   price: IntFilter
   shortDescription: StringFilter
