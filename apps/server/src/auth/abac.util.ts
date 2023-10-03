@@ -1,4 +1,4 @@
-import { Permission } from "accesscontrol";
+import { Permission } from "nest-access-control";
 
 /**
  * @returns attributes not allowed to appear on given data according to given
