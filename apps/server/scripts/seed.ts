@@ -63,7 +63,7 @@ async function seed(bcryptSalt: Salt) {
               // Add other amenities
             },
             country: faker.location.country(),
-            description: faker.lorem.paragraph({ min: 10, max: 40 }),
+            description: faker.lorem.sentences(2),
             latitude: faker.location.latitude(),
             longitude: faker.location.longitude(),
             maxGuests: faker.number.float({ min: 1, max: 10 }),
